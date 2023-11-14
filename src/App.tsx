@@ -77,7 +77,10 @@ function App() {
           direction="row"
           wrap="wrap"
         >
-          <BarGraph width={Math.min(width - 500, 900)} height={height} />
+          <BarGraph
+            width={Math.min(width - 500, 900)}
+            height={Math.min(height, 400)}
+          />
           <SimpleGrid ref={ref} cols={1}>
             <Title>Themenauswahl</Title>
             <Text c="dimmed">Welchen Merkmale willst du vergleichen?</Text>

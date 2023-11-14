@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from "react";
+import React, { useMemo } from "react";
 import { Bar } from "@visx/shape";
 import { Group } from "@visx/group";
 import { Card, Title, Menu, UnstyledButton, ChevronIcon } from "@mantine/core";
@@ -7,6 +7,7 @@ import letterFrequency, {
 } from "@visx/mock-data/lib/mocks/letterFrequency";
 import { scaleBand, scaleLinear } from "@visx/scale";
 import { useTooltip, useTooltipInPortal } from "@visx/tooltip";
+import { useStatisticsStore } from "./Store";
 
 // Sort data by frequency
 const verticalMargin = 120;
@@ -26,6 +27,9 @@ export function Graph({ width, height }: BarsProps) {
   // bounds
   const xMax = width;
   const yMax = height - verticalMargin;
+
+  const countys = useStatisticsStore((state) => state.countys);
+  const changeCounty = useStatisticsStore((state) => state.changeCounty);
 
   const originalData = letterFrequency
     .slice(5)
@@ -108,26 +112,31 @@ export function Graph({ width, height }: BarsProps) {
           <Menu.Target>
             <UnstyledButton>
               <Title inherit variant="gradient">
-                Brandenburg
+                {countys}
                 <ChevronIcon width={50}></ChevronIcon>
               </Title>
             </UnstyledButton>
           </Menu.Target>
           <Menu.Dropdown>
             <Menu.Label>Wähle ein anderes Bundesland aus</Menu.Label>
-            <Menu.Item>
+            <Menu.Item onClick={() => changeCounty("Berlin")}>
               <Title order={5} variant="gradient">
                 Berlin
               </Title>
             </Menu.Item>
-            <Menu.Item>
+            <Menu.Item onClick={() => changeCounty("Hamburg")}>
               <Title order={5} variant="gradient">
                 Hamburg
               </Title>
             </Menu.Item>
-            <Menu.Item>
+            <Menu.Item onClick={() => changeCounty("Hannover")}>
               <Title order={5} inherit variant="gradient">
                 Hannover
+              </Title>
+            </Menu.Item>
+            <Menu.Item onClick={() => changeCounty("Brandenburg")}>
+              <Title order={5} inherit variant="gradient">
+                Brandenburg
               </Title>
             </Menu.Item>
           </Menu.Dropdown>

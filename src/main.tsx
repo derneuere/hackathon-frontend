@@ -3,13 +3,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 
-import {
-  Title,
-  MantineProvider,
-  AppShell,
-  Footer,
-  Center,
-} from "@mantine/core";
+import { MantineProvider, AppShell, Footer } from "@mantine/core";
 import { FooterSimple } from "./FooterSimple.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
