@@ -52,6 +52,8 @@ function App() {
     <ImageCheckbox {...item} key={item.title} />
   ));
 
+  const debug = false;
+
   const { ref, height } = useElementSize();
   const { width } = useViewportSize();
 
@@ -81,17 +83,6 @@ function App() {
                 Spur
               </Text>{" "}
               nach dem optimalen Remote-Refugium
-              {variables.map((variable) => (
-                <Text key={variable.name} component="span" inherit>
-                  {" "}
-                  {variable.name}
-                  <Text component="span" inherit variant="gradient">
-                    {" "}
-                    {variable.weight}
-                  </Text>
-                  {variable.selected ? "✅" : "❌"}
-                </Text>
-              ))}
             </Text>
           </Card>
         </Center>
@@ -112,6 +103,18 @@ function App() {
             {items}
           </SimpleGrid>
         </Flex>
+        {debug &&
+          variables.map((variable) => (
+            <Text key={variable.name} component="span" inherit>
+              {" "}
+              {variable.name}
+              <Text component="span" inherit variant="gradient">
+                {" "}
+                {variable.weight}
+              </Text>
+              {variable.selected ? "✅" : "❌"}
+            </Text>
+          ))}
       </Stack>
     </div>
   );

@@ -1,20 +1,21 @@
 import React, { useMemo } from "react";
-import { Bar } from "@visx/shape";
+import { BarStack } from "@visx/shape";
 import { Group } from "@visx/group";
 import { Card, Title, Menu, UnstyledButton, ChevronIcon } from "@mantine/core";
-import letterFrequency, {
-  LetterFrequency,
-} from "@visx/mock-data/lib/mocks/letterFrequency";
-import { scaleBand, scaleLinear } from "@visx/scale";
+import type { GraphData } from "./Store";
+import { scaleBand, scaleLinear, scaleOrdinal } from "@visx/scale";
 import { useTooltip, useTooltipInPortal } from "@visx/tooltip";
 import { useStatisticsStore } from "./Store";
+
+import { AxisBottom } from "@visx/axis";
 
 // Sort data by frequency
 const verticalMargin = 120;
 
 // accessors
-const getLetter = (d: LetterFrequency) => d.letter;
-const getLetterFrequency = (d: LetterFrequency) => Number(d.frequency) * 100;
+const purple1 = "#6c5efb";
+const purple2 = "#c998ff";
+export const purple3 = "#a44afe";
 
 export type BarsProps = {
   width: number;
@@ -22,19 +23,69 @@ export type BarsProps = {
   events?: boolean;
 };
 
+export type StackedBarData = {
+  circle: string;
+  Gästeübernachtungen: number;
+  "Anzahl der Grundschulen": number;
+  "Durchschnittlicher Kaufwert je qm": number;
+};
+
 export function Graph({ width, height }: BarsProps) {
-  // State to track the currently hovered bar and its data
-  // bounds
   const xMax = width;
   const yMax = height - verticalMargin;
 
-  const countys = useStatisticsStore((state) => state.countys);
-  const changeCounty = useStatisticsStore((state) => state.changeCounty);
+  const { graphData, changeCounty, countys, variables } = useStatisticsStore(
+    (state) => state
+  );
+  const keys = [...new Set(graphData.map((item) => item.name))];
 
-  const originalData = letterFrequency
-    .slice(5)
-    .sort((a, b) => a.frequency - b.frequency);
+  const transformedData = graphData
+    .filter((item) => item.county === countys[0])
+    .reduce<StackedBarData[]>((accumulator, item) => {
+      const existingItem = accumulator.find(
+        (accItem) => accItem.circle === item.circle
+      );
+
+      const variable = variables.find(
+        (variable) => variable.name === item.name
+      );
+
+      const weight = variable?.selected ? variable?.weight : 1;
+
+      if (existingItem) {
+        // Check if a key with name item.name exists
+        const existingKey = Object.keys(existingItem).find(
+          (key) => key === item.name
+        );
+        // If the key doesn't exist, create a new entry
+        existingItem[item.name] = item.value * weight;
+      } else {
+        // If the circle doesn't exist, create a new entry
+        accumulator.push({
+          circle: item.circle,
+          [item.name]: item.value * weight,
+        } as StackedBarData);
+      }
+      return accumulator;
+    }, []);
+
+  // sort transformed data by total value
+  transformedData.sort((a, b) => {
+    const aTotal = Object.values(a).reduce(
+      (acc, value) => acc + parseFloat(value) || 0,
+      0
+    );
+    const bTotal = Object.values(b).reduce(
+      (acc, value) => acc + parseFloat(value) || 0,
+      0
+    );
+
+    return aTotal - bTotal;
+  });
+
+  const originalData = transformedData;
   let data = originalData;
+
   // Remove smallest elements depending on width: 800, 600, 400, 200
   if (width < 800) {
     // Limit to 18 elements
@@ -59,14 +110,8 @@ export function Graph({ width, height }: BarsProps) {
     data = originalData.slice(length - 9, length);
   }
 
-  const {
-    tooltipData,
-    tooltipLeft,
-    tooltipTop,
-    tooltipOpen,
-    showTooltip,
-    hideTooltip,
-  } = useTooltip<LetterFrequency>();
+  const { tooltipData, tooltipLeft, tooltipTop, tooltipOpen, showTooltip } =
+    useTooltip<StackedBarData>();
 
   // If you don't want to use a Portal, simply replace `TooltipInPortal` below with
   // `Tooltip` or `TooltipWithBounds` and remove `containerRef`
@@ -77,26 +122,25 @@ export function Graph({ width, height }: BarsProps) {
     scroll: true,
   });
 
+  console.log(data);
+
   // scales, memoize for performance
-  const xScale = useMemo(
-    () =>
-      scaleBand<string>({
-        range: [0, xMax],
-        round: true,
-        domain: data.map(getLetter),
-        padding: 0.4,
-      }),
-    [xMax]
-  );
-  const yScale = useMemo(
-    () =>
-      scaleLinear<number>({
-        range: [yMax, 0],
-        round: true,
-        domain: [0, Math.max(...data.map(getLetterFrequency))],
-      }),
-    [yMax]
-  );
+  const xScale = scaleBand<string>({
+    range: [0, xMax],
+    round: true,
+    domain: data.map((i) => i.circle),
+    padding: 0.4,
+  });
+  const yScale = scaleLinear<number>({
+    range: [yMax, 0],
+    round: true,
+    domain: [0, 3],
+  });
+
+  const colorScale = scaleOrdinal<string, string>({
+    domain: data.map((d) => Object.keys(d)[1]),
+    range: [purple1, purple2, purple3],
+  });
 
   return width < 10 ? null : (
     <Card
@@ -143,37 +187,53 @@ export function Graph({ width, height }: BarsProps) {
         </Menu>
       </Title>
       <svg ref={containerRef} width={width} height={height}>
-        <Group top={verticalMargin / 2}>
-          {data.map((d) => {
-            const letter = getLetter(d);
-            const barWidth = xScale.bandwidth();
-            const barHeight = yMax - (yScale(getLetterFrequency(d)) ?? 0);
-            const barX = xScale(letter);
-            const barY = yMax - barHeight;
-            return (
-              <Bar
-                key={`bar-${letter}`}
-                x={barX}
-                y={barY}
-                width={barWidth}
-                rx={4}
-                height={barHeight}
-                xlinkTitle="Die Top Kreise in Deutschland"
-                fill="rgb(82, 171, 152, .5)"
-                onMouseEnter={() => {
-                  showTooltip({
-                    tooltipData: d,
-                    tooltipLeft: barX,
-                    tooltipTop: barY,
-                  });
-                }}
-                onMouseLeave={() => {
-                  hideTooltip();
-                }}
-              />
-            );
-          })}
+        <Group>
+          <BarStack<StackedBarData, string>
+            data={data}
+            x={(i: StackedBarData) => {
+              console.log(i);
+              return i.circle;
+            }}
+            keys={keys}
+            xScale={xScale}
+            yScale={yScale}
+            color={colorScale}
+          >
+            {(barStacks) =>
+              barStacks.map((barStack) =>
+                barStack.bars.map((bar) => (
+                  <rect
+                    key={`bar-stack-${barStack.index}-${bar.index}`}
+                    x={bar.x}
+                    y={bar.y}
+                    height={bar.height}
+                    width={bar.width}
+                    fill={bar.color}
+                    onMouseEnter={() => {
+                      console.log(bar.bar.data);
+                      showTooltip({
+                        tooltipData: bar,
+                        tooltipLeft: bar.x,
+                        tooltipTop: bar.y,
+                      });
+                    }}
+                  />
+                ))
+              )
+            }
+          </BarStack>
         </Group>
+        <AxisBottom
+          top={yMax}
+          scale={xScale}
+          stroke={purple3}
+          tickStroke={purple3}
+          tickLabelProps={{
+            fill: purple3,
+            fontSize: 11,
+            textAnchor: "middle",
+          }}
+        />
         {tooltipOpen && (
           <TooltipInPortal
             // set this to random so it correctly updates with parent bounds
@@ -183,9 +243,12 @@ export function Graph({ width, height }: BarsProps) {
           >
             {tooltipData && (
               <div>
-                <strong>Letter: {tooltipData.letter}</strong>
+                <strong>Kreis: {tooltipData.bar.data.circle}</strong>
                 <br />
-                Frequency: {Number(tooltipData.frequency) * 100}
+                <strong>Statistik: {tooltipData.key}</strong>
+                <br />
+                Relativer Wert:{" "}
+                {Number(tooltipData.bar.data[tooltipData.key]).toFixed(2)}
               </div>
             )}
           </TooltipInPortal>
