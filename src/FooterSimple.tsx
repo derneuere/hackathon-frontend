@@ -51,7 +51,13 @@ export function FooterSimple() {
           <ActionIcon size="lg" color="gray" variant="subtle">
             <IconBrandTwitter />
           </ActionIcon>
-          <ActionIcon size="lg" color="gray" variant="subtle">
+          <ActionIcon
+            size="lg"
+            color="gray"
+            variant="subtle"
+            component="a"
+            href="https://github.com/derneuere"
+          >
             <IconBrandGithub />
           </ActionIcon>
         </Group>

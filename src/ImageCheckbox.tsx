@@ -67,6 +67,7 @@ export function ImageCheckbox({
           />
         </Flex>
         <Slider
+          disabled={!item?.selected}
           step={1}
           min={0}
           max={3}

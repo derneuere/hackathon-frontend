@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { BarStack } from "@visx/shape";
 import { Group } from "@visx/group";
 import { Card, Title, Menu, UnstyledButton, ChevronIcon } from "@mantine/core";
@@ -8,6 +8,10 @@ import { useTooltip, useTooltipInPortal } from "@visx/tooltip";
 import { useStatisticsStore } from "./Store";
 
 import { AxisBottom } from "@visx/axis";
+import { useGetAbfrageErgebnis } from "./client/datenbrauereiComponents";
+
+// To-Do: Add animation
+import { useSpring, animated } from "react-spring";
 
 // Sort data by frequency
 const verticalMargin = 120;
@@ -31,6 +35,22 @@ export type StackedBarData = {
 };
 
 export function Graph({ width, height }: BarsProps) {
+  const { data: result } = useGetAbfrageErgebnis({
+    pathParams: { id: "baulandpreise" },
+    // To-Do: Add county to query
+  });
+
+  // Map AbfrageErgebnis to GraphData
+  const maybe = result?.merkmalErgebnisse?.map((item) => {
+    const graphData: GraphData = {
+      name: item.merkmalCode || "", // This is just an id
+      county: "Brandenburg", // Use the selected county
+      circle: item.regionalGliederung || "", // This is a number!
+      value: item.normierterWert || 0,
+    };
+    return graphData;
+  });
+
   const xMax = width;
   const yMax = height - verticalMargin;
 
@@ -110,8 +130,14 @@ export function Graph({ width, height }: BarsProps) {
     data = originalData.slice(length - 9, length);
   }
 
-  const { tooltipData, tooltipLeft, tooltipTop, tooltipOpen, showTooltip } =
-    useTooltip<StackedBarData>();
+  const {
+    tooltipData,
+    tooltipLeft,
+    tooltipTop,
+    tooltipOpen,
+    showTooltip,
+    hideTooltip,
+  } = useTooltip<StackedBarData>();
 
   // If you don't want to use a Portal, simply replace `TooltipInPortal` below with
   // `Tooltip` or `TooltipWithBounds` and remove `containerRef`
@@ -121,8 +147,6 @@ export function Graph({ width, height }: BarsProps) {
     // when tooltip containers are scrolled, this will correctly update the Tooltip position
     scroll: true,
   });
-
-  console.log(data);
 
   // scales, memoize for performance
   const xScale = scaleBand<string>({
@@ -191,7 +215,6 @@ export function Graph({ width, height }: BarsProps) {
           <BarStack<StackedBarData, string>
             data={data}
             x={(i: StackedBarData) => {
-              console.log(i);
               return i.circle;
             }}
             keys={keys}
@@ -210,12 +233,14 @@ export function Graph({ width, height }: BarsProps) {
                     width={bar.width}
                     fill={bar.color}
                     onMouseEnter={() => {
-                      console.log(bar.bar.data);
                       showTooltip({
                         tooltipData: bar,
                         tooltipLeft: bar.x,
                         tooltipTop: bar.y,
                       });
+                    }}
+                    onMouseLeave={() => {
+                      hideTooltip();
                     }}
                   />
                 ))
