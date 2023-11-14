@@ -161,10 +161,6 @@ export function Graph({ width, height }: BarsProps) {
                 xlinkTitle="Die Top Kreise in Deutschland"
                 fill="rgb(82, 171, 152, .5)"
                 onMouseEnter={() => {
-                  console.log("enter");
-                  console.log(d);
-                  console.log(barX);
-                  console.log(barY);
                   showTooltip({
                     tooltipData: d,
                     tooltipLeft: barX,
@@ -172,7 +168,6 @@ export function Graph({ width, height }: BarsProps) {
                   });
                 }}
                 onMouseLeave={() => {
-                  console.log("hide");
                   hideTooltip();
                 }}
               />

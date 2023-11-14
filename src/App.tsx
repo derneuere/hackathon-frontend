@@ -15,6 +15,8 @@ import {
   IconHomeSearch,
   IconPlaneDeparture,
 } from "@tabler/icons-react";
+import { useStatisticsStore } from "./Store";
+
 const mockdata = [
   {
     description: "Kaufwerte für Bauland",
@@ -34,6 +36,18 @@ const mockdata = [
 ];
 
 function App() {
+  const { variables, addVariable } = useStatisticsStore((state) => state);
+
+  if (variables.length === 0) {
+    mockdata.map((item) =>
+      addVariable({
+        name: item.title,
+        weight: 0,
+        selected: false,
+      })
+    );
+  }
+
   const items = mockdata.map((item) => (
     <ImageCheckbox {...item} key={item.title} />
   ));
@@ -67,6 +81,17 @@ function App() {
                 Spur
               </Text>{" "}
               nach dem optimalen Remote-Refugium
+              {variables.map((variable) => (
+                <Text key={variable.name} component="span" inherit>
+                  {" "}
+                  {variable.name}
+                  <Text component="span" inherit variant="gradient">
+                    {" "}
+                    {variable.weight}
+                  </Text>
+                  {variable.selected ? "✅" : "❌"}
+                </Text>
+              ))}
             </Text>
           </Card>
         </Center>

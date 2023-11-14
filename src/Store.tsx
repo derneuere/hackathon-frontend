@@ -1,15 +1,16 @@
 import { create } from "zustand";
 
-type Variable = {
+export type Variable = {
   name: string;
   weight: number;
+  selected: boolean;
 };
 
 interface StatisticState {
   variables: Variable[];
   countys: string[];
   addVariable: (variable: Variable) => void;
-  removeVariable: (variable: Variable) => void;
+  changeVariable: (variable: Variable) => void;
   changeCounty: (county: string) => void;
 }
 
@@ -18,9 +19,11 @@ export const useStatisticsStore = create<StatisticState>((set) => ({
   countys: ["Brandenburg"],
   addVariable: (variable) =>
     set((state) => ({ variables: [...state.variables, variable] })),
-  removeVariable: (variable) =>
+  changeVariable: (variable) =>
     set((state) => ({
-      variables: state.variables.filter((v) => v.name !== variable.name),
+      variables: state.variables.map((item) =>
+        item.name === variable.name ? variable : item
+      ),
     })),
   changeCounty: (county) => set(() => ({ countys: [county] })),
 }));
