@@ -1,1 +1,184 @@
-{"openapi":"3.0.1","info":{"title":"Die Datenbrauerei","description":"Don't call us, we ll call ya!","contact":{"name":"Die Datenbrauerei"}},"servers":[{"url":"http://localhost:8080","description":"Generated server url"}],"paths":{"/ergebnis/{id}":{"get":{"tags":["Ergebnis"],"summary":"Gibt das Ergebnis einer Abfrage zur Abo","operationId":"getAbfrageErgebnis","parameters":[{"name":"id","in":"path","description":"UUID der Abfrage","required":true,"schema":{"type":"string"}}],"responses":{"200":{"description":"Erfolgreich, die Ergebnisse werden mitgeteilt","content":{"application/json":{"schema":{"$ref":"#/components/schemas/AbfrageErgebnis"}}}},"400":{"description":"Ungueltige Anfrage","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Error"}}}},"401":{"description":"Unerlaubter Zugriff auf Ressourcen","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Error"}}}},"500":{"description":"Laufzeitfehler","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Error"}}}}}}},"/abo/{id}":{"get":{"tags":["Abo"],"summary":"Was habe ich abonniert?","operationId":"getAboSetup","parameters":[{"name":"id","in":"path","description":"UUID des Abo","required":true,"schema":{"type":"string"}}],"responses":{"200":{"description":"Erfolgreich, die Abonnenteninfos werden mitgeteilt","content":{"application/json":{"schema":{"$ref":"#/components/schemas/AboSetup"}}}},"400":{"description":"Ungueltige Anfrage","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Error"}}}},"401":{"description":"Unerlaubter Zugriff auf Ressourcen","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Error"}}}},"500":{"description":"Laufzeitfehler","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Error"}}}}}}}},"components":{"schemas":{"AbfrageErgebnis":{"type":"object","properties":{"abfrageId":{"type":"string"},"timestamp":{"type":"string","format":"date-time"},"merkmalErgebnisse":{"type":"array","items":{"$ref":"#/components/schemas/MerkmalErgebnis"}}}},"MerkmalErgebnis":{"type":"object","properties":{"merkmalCode":{"type":"string"},"regionalGliederung":{"type":"string"},"normierterWert":{"type":"number"},"absoluterWert":{"type":"number"}}},"Error":{"type":"object","properties":{"code":{"type":"string"},"message":{"type":"string"}}},"Abfrage":{"type":"object","properties":{"uuid":{"type":"string"},"regionalerUmfang":{"type":"string"},"dimensionen":{"type":"array","items":{"$ref":"#/components/schemas/AbfrageDimension"}}}},"AbfrageDimension":{"type":"object","properties":{"merkmalName":{"type":"string"},"gewichtung":{"type":"string","enum":["NULL","EINS","ZWEI","DREI"]}}},"AboSetup":{"type":"object","properties":{"aboStammdaten":{"$ref":"#/components/schemas/AboStammdaten"}}},"AboStammdaten":{"type":"object","properties":{"uuid":{"type":"string"},"email":{"type":"string"},"name":{"type":"string"},"abfragen":{"type":"array","items":{"$ref":"#/components/schemas/Abfrage"}}}}}}}
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Die Datenbrauerei",
+    "description": "Don't call us, we ll call ya!",
+    "version": "1.0.0",
+    "contact": { "name": "Die Datenbrauerei" }
+  },
+  "servers": [
+    { "url": "http://localhost:8080", "description": "Generated server url" }
+  ],
+  "paths": {
+    "/ergebnis/{id}": {
+      "get": {
+        "tags": ["Ergebnis"],
+        "summary": "Gibt das Ergebnis einer Abfrage zur Abo",
+        "operationId": "getAbfrageErgebnis",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "UUID der Abfrage",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Erfolgreich, die Ergebnisse werden mitgeteilt",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AbfrageErgebnis" }
+              }
+            }
+          },
+          "400": {
+            "description": "Ungueltige Anfrage",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unerlaubter Zugriff auf Ressourcen",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "500": {
+            "description": "Laufzeitfehler",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/abo/{id}": {
+      "get": {
+        "tags": ["Abo"],
+        "summary": "Was habe ich abonniert?",
+        "operationId": "getAboSetup",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "UUID des Abo",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Erfolgreich, die Abonnenteninfos werden mitgeteilt",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AboSetup" }
+              }
+            }
+          },
+          "400": {
+            "description": "Ungueltige Anfrage",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unerlaubter Zugriff auf Ressourcen",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "500": {
+            "description": "Laufzeitfehler",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AbfrageErgebnis": {
+        "type": "object",
+        "properties": {
+          "abfrageId": { "type": "string" },
+          "timestamp": { "type": "string", "format": "date-time" },
+          "merkmalErgebnisse": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/MerkmalErgebnis" }
+          }
+        }
+      },
+      "MerkmalErgebnis": {
+        "type": "object",
+        "properties": {
+          "merkmalCode": { "type": "string" },
+          "regionalGliederung": { "type": "string" },
+          "normierterWert": { "type": "number" },
+          "absoluterWert": { "type": "number" }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "code": { "type": "string" },
+          "message": { "type": "string" }
+        }
+      },
+      "Abfrage": {
+        "type": "object",
+        "properties": {
+          "uuid": { "type": "string" },
+          "regionalerUmfang": { "type": "string" },
+          "dimensionen": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/AbfrageDimension" }
+          }
+        }
+      },
+      "AbfrageDimension": {
+        "type": "object",
+        "properties": {
+          "merkmalName": { "type": "string" },
+          "gewichtung": {
+            "type": "string",
+            "enum": ["NULL", "EINS", "ZWEI", "DREI"]
+          }
+        }
+      },
+      "AboSetup": {
+        "type": "object",
+        "properties": {
+          "aboStammdaten": { "$ref": "#/components/schemas/AboStammdaten" }
+        }
+      },
+      "AboStammdaten": {
+        "type": "object",
+        "properties": {
+          "uuid": { "type": "string" },
+          "email": { "type": "string" },
+          "name": { "type": "string" },
+          "abfragen": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Abfrage" }
+          }
+        }
+      }
+    }
+  }
+}

@@ -5,6 +5,9 @@ import "./index.css";
 
 import { MantineProvider, AppShell, Footer } from "@mantine/core";
 import { FooterSimple } from "./FooterSimple.tsx";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -49,7 +52,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           </Footer>
         }
       >
-        <App />
+        <QueryClientProvider client={queryClient}>
+          <App />
+        </QueryClientProvider>
       </AppShell>
     </MantineProvider>
   </React.StrictMode>
