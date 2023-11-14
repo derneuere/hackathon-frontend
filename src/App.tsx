@@ -8,7 +8,7 @@ import {
   MantineProvider,
   Stack,
 } from "@mantine/core";
-import Graph from "./Graph";
+import BarGraph from "./Graph";
 function App() {
   const [count, setCount] = useState(0);
 
@@ -27,17 +27,16 @@ function App() {
         }}
       >
         <Stack align="center" justify="flex-end">
-          <Graph width={1000} height={300} />
-
+          <BarGraph width={1000} height={300} />
           <Center>
             <Card>
               <Title
                 variant="gradient"
-                gradient={{ from: "#43cea2", to: "#185a9d" }}
+                gradient={{ from: "#5be6b0", to: "#50c4af" }}
                 weight={700}
                 align="center"
               >
-                Hackthon Frontend
+                WO REMOTE?
               </Title>
               <Button
                 variant="light"
