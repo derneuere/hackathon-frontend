@@ -12,14 +12,15 @@
   "dependencies": {
     "@mantine/core": "^6.0.21",
     "@mantine/hooks": "^6.0.21",
+    "@tabler/icons-react": "^2.40.0",
     "@tanstack/react-query": "^5.8.3",
+    "@visx/event": "3.3.0",
+    "@visx/gradient": "3.3.0",
     "@visx/group": "^3.3.0",
     "@visx/mock-data": "^3.3.0",
     "@visx/scale": "^3.3.0",
     "@visx/shape": "^3.3.0",
-    "@visx/gradient": "3.3.0",
     "@visx/tooltip": "^3.3.0",
-    "@visx/event": "3.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "zustand": "^4.4.6"
