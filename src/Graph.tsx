@@ -106,7 +106,7 @@ export function Graph({ width, height }: BarsProps) {
         (variable) => variable.name === item.name
       );
 
-      const weight = variable?.selected ? variable?.weight : 1;
+      const weight = variable?.selected ? variable?.weight : 0;
 
       if (existingItem) {
         // If the key doesn't exist, create a new entry

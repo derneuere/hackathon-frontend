@@ -11,6 +11,7 @@ import {
 
 import classes from "./ImageCheckbox.module.css";
 import { useStatisticsStore } from "./Store";
+import { IconBell } from "@tabler/icons-react";
 
 interface ImageCheckboxProps {
   title: string;
@@ -45,24 +46,6 @@ export function ImageCheckbox({
           direction="row"
           wrap="wrap"
         >
-          <ActionIcon variant="filled" color={color}>
-            {icon}
-          </ActionIcon>
-
-          <div className={classes.body}>
-            <Text c="dimmed" size="xs" lh={1} mb={5}>
-              {description}
-            </Text>
-            <Text
-              fw={500}
-              size="sm"
-              color={darkerColor ? darkerColor : color}
-              lh={1}
-            >
-              {title}
-            </Text>
-          </div>
-
           <Checkbox
             checked={item?.selected}
             color={color}
@@ -76,30 +59,63 @@ export function ImageCheckbox({
             tabIndex={-1}
             styles={{ input: { cursor: "pointer" } }}
           />
+          <div>
+            <Flex
+              mih={50}
+              miw={290}
+              gap="md"
+              justify="flex-start"
+              align="flex-start"
+              direction="row"
+              wrap="wrap"
+            >
+              <ActionIcon variant="filled" color={color}>
+                {icon}
+              </ActionIcon>
+
+              <div className={classes.body}>
+                <Text c="dimmed" size="xs" lh={1} mb={5}>
+                  {description}
+                </Text>
+                <Text
+                  fw={500}
+                  size="sm"
+                  color={darkerColor ? darkerColor : color}
+                  lh={1}
+                >
+                  {title}
+                </Text>
+              </div>
+
+              <ActionIcon variant="light" color="yellow">
+                <IconBell></IconBell>
+              </ActionIcon>
+            </Flex>
+            <Slider
+              disabled={!item?.selected}
+              step={1}
+              min={0}
+              max={3}
+              marks={[
+                { value: 0, label: "0" },
+                { value: 1, label: "1" },
+                { value: 2, label: "2" },
+                { value: 3, label: "3" },
+              ]}
+              color={color}
+              value={item?.weight}
+              onChange={(i: number) =>
+                changeVariable({
+                  name: title,
+                  weight: i,
+                  selected: item?.selected || false,
+                })
+              }
+            >
+              {" "}
+            </Slider>
+          </div>
         </Flex>
-        <Slider
-          disabled={!item?.selected}
-          step={1}
-          min={0}
-          max={3}
-          marks={[
-            { value: 0, label: "0" },
-            { value: 1, label: "1" },
-            { value: 2, label: "2" },
-            { value: 3, label: "3" },
-          ]}
-          color={color}
-          value={item?.weight}
-          onChange={(i: number) =>
-            changeVariable({
-              name: title,
-              weight: i,
-              selected: item?.selected || false,
-            })
-          }
-        >
-          {" "}
-        </Slider>
       </Card>
     </UnstyledButton>
   );
