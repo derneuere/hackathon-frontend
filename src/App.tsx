@@ -24,16 +24,20 @@ const mockdata = [
     description: "Kaufwerte für Bauland",
     title: "Durchschnittlicher Kaufwert je qm",
     icon: <IconHomeSearch />,
+    color: "theme-blue-green.0",
   },
   {
     description: "Allgemeinbildende Schulen",
     title: "Anzahl der Grundschulen",
     icon: <IconBackpack />,
+    color: "theme-green.0",
   },
   {
     description: "Tourismus",
     title: "Gästeübernachtungen",
     icon: <IconPlaneDeparture />,
+    color: "theme-light-blue.0",
+    darkerColor: "theme-light-blue.2",
   },
 ];
 
@@ -107,31 +111,32 @@ function App() {
             {items}
           </SimpleGrid>
         </Flex>
-
-        <Card shadow="sm" padding="lg" radius="md" withBorder>
-          <Stack>
-            {circles.map((circle) => (
-              <Stack>
-                <Title order={3}>Kreis: {circle}</Title>
-                <Group>
-                  {graphData
-                    .filter((i) => i.circle === circle)
-                    .map((i) => (
-                      <Card shadow="sm" padding="lg" radius="md" withBorder>
-                        <Stack mih={50} miw={290} spacing={"xs"}>
-                          <Text size="sm" c="dimmed">
-                            {i.name}
-                          </Text>
-                          <Text size="md">{i.absolute}</Text>
-                          <Slider value={i.value} max={1}></Slider>
-                        </Stack>
-                      </Card>
-                    ))}
-                </Group>
-              </Stack>
-            ))}
-          </Stack>
-        </Card>
+        {circles.length > 0 && (
+          <Card shadow="sm" padding="lg" radius="md" withBorder>
+            <Stack>
+              {circles.map((circle) => (
+                <Stack>
+                  <Title order={3}>Kreis: {circle}</Title>
+                  <Group>
+                    {graphData
+                      .filter((i) => i.circle === circle)
+                      .map((i) => (
+                        <Card shadow="sm" padding="lg" radius="md" withBorder>
+                          <Stack mih={50} miw={290} spacing={"xs"}>
+                            <Text size="sm" c="dimmed">
+                              {i.name}
+                            </Text>
+                            <Text size="md">{i.absolute}</Text>
+                            <Slider value={i.value} max={1}></Slider>
+                          </Stack>
+                        </Card>
+                      ))}
+                  </Group>
+                </Stack>
+              ))}
+            </Stack>
+          </Card>
+        )}
         <div style={{ height: 100 }}></div>
         {debug &&
           variables.map((variable) => (

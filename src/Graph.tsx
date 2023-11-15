@@ -17,9 +17,9 @@ import { useSpring, animated } from "react-spring";
 const verticalMargin = 120;
 
 // accessors
-const purple1 = "#6c5efb";
-const purple2 = "#c998ff";
-export const purple3 = "#a44afe";
+const purple3 = "#c8d8e4";
+const purple2 = "#52ab98";
+export const purple1 = "#2b6777";
 
 export type BarsProps = {
   width: number;
@@ -27,7 +27,7 @@ export type BarsProps = {
   events?: boolean;
 };
 
-function shadeColor(color, percent) {
+export function shadeColor(color, percent) {
   let R = parseInt(color.substring(1, 3), 16);
   let G = parseInt(color.substring(3, 5), 16);
   let B = parseInt(color.substring(5, 7), 16);
@@ -287,10 +287,10 @@ export function Graph({ width, height }: BarsProps) {
         <AxisBottom
           top={yMax}
           scale={xScale}
-          stroke={purple3}
-          tickStroke={purple3}
+          stroke={purple1}
+          tickStroke={purple1}
           tickLabelProps={{
-            fill: purple3,
+            fill: purple1,
             fontSize: 11,
             textAnchor: "middle",
           }}
@@ -317,7 +317,6 @@ export function Graph({ width, height }: BarsProps) {
                     tooltipData.key + tooltipData.bar.data.circle
                   ]
                 }
-                {JSON.stringify(circles)}
               </div>
             )}
           </TooltipInPortal>

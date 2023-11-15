@@ -17,7 +17,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       theme={{
         colors: {
           "theme-blue-green": ["#2b6777"],
-          "theme-light-blue": ["#c8d8e4"],
+          "theme-light-blue": ["#c8d8e4", "#a0adb6", "#788289", "#3c4144"],
           "theme-light-grey": ["#f2f2f2"],
           "theme-green": ["#52ab98"],
         },

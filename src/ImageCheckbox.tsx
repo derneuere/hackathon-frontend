@@ -6,6 +6,7 @@ import {
   Card,
   Slider,
   Flex,
+  ActionIcon,
 } from "@mantine/core";
 
 import classes from "./ImageCheckbox.module.css";
@@ -15,18 +16,20 @@ interface ImageCheckboxProps {
   title: string;
   description: string;
   icon: any;
+  color: string;
+  darkerColor?: string;
 }
 
 export function ImageCheckbox({
   title,
   description,
   icon,
+  color,
+  darkerColor,
   ...others
 }: ImageCheckboxProps &
   Omit<React.ComponentPropsWithoutRef<"button">, keyof ImageCheckboxProps>) {
-  const { variables, changeVariable, addVariable } = useStatisticsStore(
-    (state) => state
-  );
+  const { variables, changeVariable } = useStatisticsStore((state) => state);
 
   const item = variables.find((item) => item.name === title);
 
@@ -42,19 +45,27 @@ export function ImageCheckbox({
           direction="row"
           wrap="wrap"
         >
-          {icon}
+          <ActionIcon variant="filled" color={color}>
+            {icon}
+          </ActionIcon>
 
           <div className={classes.body}>
             <Text c="dimmed" size="xs" lh={1} mb={5}>
               {description}
             </Text>
-            <Text fw={500} size="sm" lh={1}>
+            <Text
+              fw={500}
+              size="sm"
+              color={darkerColor ? darkerColor : color}
+              lh={1}
+            >
               {title}
             </Text>
           </div>
 
           <Checkbox
             checked={item?.selected}
+            color={color}
             onChange={() => {
               changeVariable({
                 name: title,
@@ -71,6 +82,7 @@ export function ImageCheckbox({
           step={1}
           min={0}
           max={3}
+          color={color}
           value={item?.weight}
           onChange={(i: number) =>
             changeVariable({
