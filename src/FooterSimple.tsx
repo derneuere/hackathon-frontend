@@ -8,7 +8,6 @@ import {
 } from "@mantine/core";
 import classes from "./FooterSimple.module.css";
 import { IconBrandTwitter, IconBrandGithub } from "@tabler/icons-react";
-import logo1 from "./assets/Destatis.webp";
 import logo2 from "./assets/2023-11-14 15_19_05-Window.webp";
 import logo3 from "./assets/datenbrauerei.webp";
 
@@ -42,7 +41,6 @@ export function FooterSimple() {
           direction="row"
           wrap="wrap"
         >
-          <Image src={logo1} maw={100} mah={50} mx="auto" />
           <Image src={logo2} maw={50} mah={40} mx="auto" />
           <Image src={logo3} maw={50} mah={40} mx="auto" />
         </Flex>

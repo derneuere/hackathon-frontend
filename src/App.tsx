@@ -4,15 +4,19 @@ import {
   Card,
   Center,
   Stack,
-  SimpleGrid,
+  Progress,
   Flex,
   Slider,
-  Group,
   Modal,
   TextInput,
   ActionIcon,
 } from "@mantine/core";
-import { useElementSize, useViewportSize, useDisclosure } from "@mantine/hooks";
+import {
+  useElementSize,
+  useViewportSize,
+  useDisclosure,
+  useMediaQuery,
+} from "@mantine/hooks";
 import BarGraph from "./Graph";
 import { ImageCheckbox } from "./ImageCheckbox";
 import {
@@ -50,7 +54,7 @@ function App() {
   const [opened, { open, close }] = useDisclosure(false);
   const { variables, circles, graphData, addVariable, selectedVariable } =
     useStatisticsStore((state) => state);
-
+  const isMobile = useMediaQuery("(max-width: 768px)");
   const selectedVariableMockdata = mockdata.find(
     (item) => item.title === selectedVariable
   );
@@ -90,7 +94,7 @@ function App() {
     >
       <Stack align="center" justify="flex-end">
         <Center>
-          <Card>
+          <div>
             <Title variant="gradient" weight={700} align="center" size="50">
               Die Datenbrauerei
             </Title>
@@ -101,24 +105,28 @@ function App() {
               </Text>{" "}
               nach dem optimalen Remote-Refugium
             </Text>
-          </Card>
+          </div>
         </Center>
         <Flex
           gap="md"
           justify="flex-start"
-          align="flex-start"
-          direction="row"
+          align="center"
+          direction={{ base: "column", sm: "row" }}
           wrap="wrap"
         >
           <BarGraph
-            width={Math.min(width - 500, 900)}
+            width={
+              isMobile ? Math.min(width - 100, 900) : Math.min(width - 500, 900)
+            }
             height={Math.min(height, 400)}
           />
-          <SimpleGrid ref={ref} cols={1}>
-            <Title>Themenauswahl</Title>
-            <Text c="dimmed">Welchen Merkmale willst du vergleichen?</Text>
+          <Stack ref={ref}>
+            <div>
+              <Title>Themenauswahl</Title>
+              <Text c="dimmed">Welchen Merkmale willst du vergleichen?</Text>
+            </div>
             {items}
-          </SimpleGrid>
+          </Stack>
         </Flex>
         {circles.length > 0 && (
           <Card shadow="sm" padding="lg" radius="md" withBorder>
@@ -126,21 +134,21 @@ function App() {
               {circles.map((circle) => (
                 <Stack>
                   <Title order={3}>Kreis: {circle}</Title>
-                  <Group>
+                  <Flex gap="md" direction={{ base: "column", sm: "row" }}>
                     {graphData
                       .filter((i) => i.circle === circle)
                       .map((i) => (
                         <Card shadow="sm" padding="lg" radius="md" withBorder>
-                          <Stack mih={50} miw={290} spacing={"xs"}>
+                          <Stack mih={50} miw={200} spacing={"xs"}>
                             <Text size="sm" c="dimmed">
                               {i.name}
                             </Text>
                             <Text size="md">{i.absolute}</Text>
-                            <Slider value={i.value} max={1}></Slider>
+                            <Progress value={i.value * 100}></Progress>
                           </Stack>
                         </Card>
                       ))}
-                  </Group>
+                  </Flex>
                 </Stack>
               ))}
             </Stack>

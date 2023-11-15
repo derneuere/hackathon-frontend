@@ -66,7 +66,7 @@ export function ImageCheckbox({
           <div>
             <Flex
               mih={50}
-              miw={290}
+              miw={300}
               gap="md"
               justify="flex-start"
               align="flex-start"
