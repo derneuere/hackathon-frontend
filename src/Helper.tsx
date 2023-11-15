@@ -24,4 +24,11 @@ export const mockdata = [
     color: "theme-light-blue.0",
     darkerColor: "theme-light-blue.2",
   },
+  {
+    description: "Tourismus",
+    title: "Gästeübernachtungen Part 2",
+    icon: <IconPlaneDeparture />,
+    color: "theme-light-blue.0",
+    darkerColor: "theme-light-blue.2",
+  },
 ];
