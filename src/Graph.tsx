@@ -27,6 +27,30 @@ export type BarsProps = {
   events?: boolean;
 };
 
+function shadeColor(color, percent) {
+  let R = parseInt(color.substring(1, 3), 16);
+  let G = parseInt(color.substring(3, 5), 16);
+  let B = parseInt(color.substring(5, 7), 16);
+
+  R = parseInt((R * (100 + percent)) / 100);
+  G = parseInt((G * (100 + percent)) / 100);
+  B = parseInt((B * (100 + percent)) / 100);
+
+  R = R < 255 ? R : 255;
+  G = G < 255 ? G : 255;
+  B = B < 255 ? B : 255;
+
+  R = Math.round(R);
+  G = Math.round(G);
+  B = Math.round(B);
+
+  const RR = R.toString(16).length == 1 ? "0" + R.toString(16) : R.toString(16);
+  const GG = G.toString(16).length == 1 ? "0" + G.toString(16) : G.toString(16);
+  const BB = B.toString(16).length == 1 ? "0" + B.toString(16) : B.toString(16);
+
+  return "#" + RR + GG + BB;
+}
+
 export type StackedBarData = {
   circle: string;
   Gästeübernachtungen: number;
@@ -55,9 +79,8 @@ export function Graph({ width, height }: BarsProps) {
   const xMax = width;
   const yMax = height - verticalMargin;
 
-  const { graphData, changeCounty, countys, variables } = useStatisticsStore(
-    (state) => state
-  );
+  const { graphData, changeCounty, countys, variables, circles, selectCircle } =
+    useStatisticsStore((state) => state);
   const keys = [...new Set(graphData.map((item) => item.name))];
   const absoluteValuesWithKeys = {};
   graphData.forEach((item) => {
@@ -237,7 +260,14 @@ export function Graph({ width, height }: BarsProps) {
                     y={bar.y}
                     height={bar.height}
                     width={bar.width}
-                    fill={bar.color}
+                    fill={
+                      circles.includes(bar.bar.data.circle)
+                        ? shadeColor(bar.color, -20)
+                        : bar.color
+                    }
+                    onClick={() => {
+                      selectCircle(bar.bar.data.circle);
+                    }}
                     onMouseEnter={() => {
                       showTooltip({
                         tooltipData: bar,
@@ -287,6 +317,7 @@ export function Graph({ width, height }: BarsProps) {
                     tooltipData.key + tooltipData.bar.data.circle
                   ]
                 }
+                {JSON.stringify(circles)}
               </div>
             )}
           </TooltipInPortal>

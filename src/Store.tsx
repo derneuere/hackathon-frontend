@@ -18,9 +18,11 @@ interface StatisticState {
   variables: Variable[];
   countys: string[];
   graphData: GraphData[];
+  circles: string[];
   addVariable: (variable: Variable) => void;
   changeVariable: (variable: Variable) => void;
   changeCounty: (county: string) => void;
+  selectCircle: (circle: string) => void;
 }
 
 export const useStatisticsStore = create<StatisticState>((set) => ({
@@ -91,6 +93,7 @@ export const useStatisticsStore = create<StatisticState>((set) => ({
     },
   ],
   countys: ["Brandenburg"],
+  circles: [],
   addVariable: (variable) =>
     set((state) => ({ variables: [...state.variables, variable] })),
   changeVariable: (variable) =>
@@ -100,4 +103,12 @@ export const useStatisticsStore = create<StatisticState>((set) => ({
       ),
     })),
   changeCounty: (county) => set(() => ({ countys: [county] })),
+  selectCircle: (circle) =>
+    set((state) => {
+      if (state.circles.includes(circle)) {
+        return { circles: state.circles.filter((item) => item !== circle) };
+      } else {
+        return { circles: [...state.circles, circle] };
+      }
+    }),
 }));

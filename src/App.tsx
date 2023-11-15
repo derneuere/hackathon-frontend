@@ -42,8 +42,8 @@ function App() {
     mockdata.map((item) =>
       addVariable({
         name: item.title,
-        weight: 0,
-        selected: false,
+        weight: 1,
+        selected: true,
       })
     );
   }
@@ -75,7 +75,7 @@ function App() {
         <Center>
           <Card>
             <Title variant="gradient" weight={700} align="center" size="50">
-              Arbeitsfreiheit 2.0
+              Die Datenbrauerei
             </Title>
             <Text c="dimmed" mt="md">
               Auf der{" "}
