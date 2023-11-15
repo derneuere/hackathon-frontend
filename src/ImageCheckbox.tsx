@@ -19,6 +19,7 @@ interface ImageCheckboxProps {
   icon: ReactNode;
   color: string;
   darkerColor?: string;
+  open: () => void;
 }
 
 export function ImageCheckbox({
@@ -27,10 +28,13 @@ export function ImageCheckbox({
   icon,
   color,
   darkerColor,
+  open,
   ...others
 }: ImageCheckboxProps &
   Omit<React.ComponentPropsWithoutRef<"button">, keyof ImageCheckboxProps>) {
-  const { variables, changeVariable } = useStatisticsStore((state) => state);
+  const { variables, changeVariable, selectVariable } = useStatisticsStore(
+    (state) => state
+  );
 
   const item = variables.find((item) => item.name === title);
 
@@ -87,7 +91,14 @@ export function ImageCheckbox({
                 </Text>
               </div>
 
-              <ActionIcon variant="light" color="yellow">
+              <ActionIcon
+                variant="light"
+                color="yellow"
+                onClick={() => {
+                  selectVariable(title);
+                  open();
+                }}
+              >
                 <IconBell></IconBell>
               </ActionIcon>
             </Flex>

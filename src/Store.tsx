@@ -19,10 +19,12 @@ interface StatisticState {
   countys: string[];
   graphData: GraphData[];
   circles: string[];
+  selectedVariable: string;
   addVariable: (variable: Variable) => void;
   changeVariable: (variable: Variable) => void;
   changeCounty: (county: string) => void;
   selectCircle: (circle: string) => void;
+  selectVariable: (variable: string) => void;
 }
 
 export const useStatisticsStore = create<StatisticState>((set) => ({
@@ -92,6 +94,7 @@ export const useStatisticsStore = create<StatisticState>((set) => ({
       absolute: 10,
     },
   ],
+  selectedVariable: "",
   countys: ["Brandenburg"],
   circles: [],
   addVariable: (variable) =>
@@ -111,4 +114,5 @@ export const useStatisticsStore = create<StatisticState>((set) => ({
         return { circles: [...state.circles, circle] };
       }
     }),
+  selectVariable: (variable) => set(() => ({ selectedVariable: variable })),
 }));
