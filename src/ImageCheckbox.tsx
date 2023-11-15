@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import {
   UnstyledButton,
   Checkbox,
@@ -15,7 +15,7 @@ import { useStatisticsStore } from "./Store";
 interface ImageCheckboxProps {
   title: string;
   description: string;
-  icon: any;
+  icon: ReactNode;
   color: string;
   darkerColor?: string;
 }

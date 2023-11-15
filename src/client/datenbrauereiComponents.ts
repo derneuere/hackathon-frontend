@@ -12,6 +12,67 @@ import type * as Fetcher from "./datenbrauereiFetcher";
 import { datenbrauereiFetch } from "./datenbrauereiFetcher";
 import type * as Schemas from "./datenbrauereiSchemas";
 
+export type GetMerkmalPathParams = {
+  /**
+   * Merkmalname (die vereinfachte Variante von der Datenbrauerei)
+   */
+  name: string;
+};
+
+export type GetMerkmalError = Fetcher.ErrorWrapper<
+  | {
+      status: 400;
+      payload: Schemas.Error;
+    }
+  | {
+      status: 401;
+      payload: Schemas.Error;
+    }
+  | {
+      status: 500;
+      payload: Schemas.Error;
+    }
+>;
+
+export type GetMerkmalVariables = {
+  pathParams: GetMerkmalPathParams;
+} & DatenbrauereiContext["fetcherOptions"];
+
+export const fetchGetMerkmal = (
+  variables: GetMerkmalVariables,
+  signal?: AbortSignal
+) =>
+  datenbrauereiFetch<
+    Schemas.AbfrageErgebnis,
+    GetMerkmalError,
+    undefined,
+    {},
+    {},
+    GetMerkmalPathParams
+  >({ url: "/merkmal/{name}", method: "get", ...variables, signal });
+
+export const useGetMerkmal = <TData = Schemas.AbfrageErgebnis>(
+  variables: GetMerkmalVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<Schemas.AbfrageErgebnis, GetMerkmalError, TData>,
+    "queryKey" | "queryFn" | "initialData"
+  >
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } =
+    useDatenbrauereiContext(options);
+  return reactQuery.useQuery<Schemas.AbfrageErgebnis, GetMerkmalError, TData>({
+    queryKey: queryKeyFn({
+      path: "/merkmal/{name}",
+      operationId: "getMerkmal",
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchGetMerkmal({ ...fetcherOptions, ...variables }, signal),
+    ...options,
+    ...queryOptions,
+  });
+};
+
 export type GetAbfrageErgebnisPathParams = {
   /**
    * UUID der Abfrage
@@ -143,6 +204,11 @@ export const useGetAboSetup = <TData = Schemas.AboSetup>(
 };
 
 export type QueryOperation =
+  | {
+      path: "/merkmal/{name}";
+      operationId: "getMerkmal";
+      variables: GetMerkmalVariables;
+    }
   | {
       path: "/ergebnis/{id}";
       operationId: "getAbfrageErgebnis";

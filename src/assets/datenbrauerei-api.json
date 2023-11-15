@@ -3,13 +3,63 @@
   "info": {
     "title": "Die Datenbrauerei",
     "description": "Don't call us, we ll call ya!",
-    "version": "1.0.0",
-    "contact": { "name": "Die Datenbrauerei" }
+    "contact": { "name": "Die Datenbrauerei" },
+    "version": "1.0.0"
   },
   "servers": [
     { "url": "http://localhost:8080", "description": "Generated server url" }
   ],
   "paths": {
+    "/merkmal/{name}": {
+      "get": {
+        "tags": ["Merkmal"],
+        "summary": "Liefert die RegDB Metadaten des Merkmals",
+        "operationId": "getMerkmal",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "Merkmalname (die vereinfachte Variante von der Datenbrauerei)",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Erfolgreich, die Metadaten werden mitgeteilt",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AbfrageErgebnis" }
+              }
+            }
+          },
+          "400": {
+            "description": "Ungueltige Anfrage",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unerlaubter Zugriff auf Ressourcen",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "500": {
+            "description": "Laufzeitfehler",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        }
+      }
+    },
     "/ergebnis/{id}": {
       "get": {
         "tags": ["Ergebnis"],
