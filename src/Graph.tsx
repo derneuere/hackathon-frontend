@@ -1,7 +1,14 @@
 import React from "react";
 import { BarStack } from "@visx/shape";
 import { Group } from "@visx/group";
-import { Card, Title, Menu, UnstyledButton, ChevronIcon } from "@mantine/core";
+import {
+  Card,
+  Title,
+  Menu,
+  UnstyledButton,
+  ChevronIcon,
+  Stack,
+} from "@mantine/core";
 import type { GraphData } from "./Store";
 import { scaleBand, scaleLinear, scaleOrdinal } from "@visx/scale";
 import { useTooltip, useTooltipInPortal } from "@visx/tooltip";
@@ -14,7 +21,7 @@ import { useGetAbfrageErgebnis } from "./client/datenbrauereiComponents";
 import { useSpring, animated } from "react-spring";
 
 // Sort data by frequency
-const verticalMargin = 120;
+const verticalMargin = 25;
 
 // accessors
 const purple3 = "#c8d8e4";
@@ -203,125 +210,127 @@ export function Graph({ width, height }: BarsProps) {
       style={{ width: width + 50 }}
       withBorder
     >
-      <Title>
-        Platzierung der Top {data.length} Kreise in{" "}
-        <Menu>
-          <Menu.Target>
-            <UnstyledButton>
-              <Title inherit variant="gradient">
-                {countys}
-                <ChevronIcon width={50}></ChevronIcon>
-              </Title>
-            </UnstyledButton>
-          </Menu.Target>
-          <Menu.Dropdown>
-            <Menu.Label>Wähle ein anderes Bundesland aus</Menu.Label>
-            <Menu.Item onClick={() => changeCounty("Berlin")}>
-              <Title order={5} variant="gradient">
-                Berlin
-              </Title>
-            </Menu.Item>
-            <Menu.Item onClick={() => changeCounty("Hamburg")}>
-              <Title order={5} variant="gradient">
-                Hamburg
-              </Title>
-            </Menu.Item>
-            <Menu.Item onClick={() => changeCounty("Hannover")}>
-              <Title order={5} inherit variant="gradient">
-                Hannover
-              </Title>
-            </Menu.Item>
-            <Menu.Item onClick={() => changeCounty("Brandenburg")}>
-              <Title order={5} inherit variant="gradient">
-                Brandenburg
-              </Title>
-            </Menu.Item>
-          </Menu.Dropdown>
-        </Menu>
-      </Title>
-      <svg ref={containerRef} width={width} height={height}>
-        <Group>
-          <BarStack<StackedBarData, string>
-            data={data}
-            x={(i: StackedBarData) => {
-              return i.circle;
+      <Stack>
+        <Title>
+          Platzierung der Top {data.length} Kreise in{" "}
+          <Menu>
+            <Menu.Target>
+              <UnstyledButton>
+                <Title inherit variant="gradient">
+                  {countys}
+                  <ChevronIcon width={50}></ChevronIcon>
+                </Title>
+              </UnstyledButton>
+            </Menu.Target>
+            <Menu.Dropdown>
+              <Menu.Label>Wähle ein anderes Bundesland aus</Menu.Label>
+              <Menu.Item onClick={() => changeCounty("Berlin")}>
+                <Title order={5} variant="gradient">
+                  Berlin
+                </Title>
+              </Menu.Item>
+              <Menu.Item onClick={() => changeCounty("Hamburg")}>
+                <Title order={5} variant="gradient">
+                  Hamburg
+                </Title>
+              </Menu.Item>
+              <Menu.Item onClick={() => changeCounty("Hannover")}>
+                <Title order={5} inherit variant="gradient">
+                  Hannover
+                </Title>
+              </Menu.Item>
+              <Menu.Item onClick={() => changeCounty("Brandenburg")}>
+                <Title order={5} inherit variant="gradient">
+                  Brandenburg
+                </Title>
+              </Menu.Item>
+            </Menu.Dropdown>
+          </Menu>
+        </Title>
+        <svg ref={containerRef} width={width} height={height}>
+          <Group>
+            <BarStack<StackedBarData, string>
+              data={data}
+              x={(i: StackedBarData) => {
+                return i.circle;
+              }}
+              keys={keys}
+              xScale={xScale}
+              yScale={yScale}
+              color={colorScale}
+            >
+              {(barStacks) =>
+                barStacks.map((barStack) =>
+                  barStack.bars.map((bar) => (
+                    <rect
+                      key={`bar-stack-${barStack.index}-${bar.index}`}
+                      x={bar.x}
+                      y={bar.y}
+                      height={bar.height}
+                      width={bar.width}
+                      fill={
+                        circles.includes(bar.bar.data.circle)
+                          ? shadeColor(bar.color, -20)
+                          : bar.color
+                      }
+                      onClick={() => {
+                        selectCircle(bar.bar.data.circle);
+                      }}
+                      onMouseEnter={() => {
+                        showTooltip({
+                          tooltipData: bar,
+                          tooltipLeft: bar.x,
+                          tooltipTop: bar.y,
+                        });
+                      }}
+                      onMouseLeave={() => {
+                        hideTooltip();
+                      }}
+                    />
+                  ))
+                )
+              }
+            </BarStack>
+          </Group>
+          <AxisBottom
+            top={yMax}
+            scale={xScale}
+            stroke={purple1}
+            tickStroke={purple1}
+            tickLabelProps={{
+              fill: purple1,
+              fontSize: 11,
+              textAnchor: "middle",
             }}
-            keys={keys}
-            xScale={xScale}
-            yScale={yScale}
-            color={colorScale}
-          >
-            {(barStacks) =>
-              barStacks.map((barStack) =>
-                barStack.bars.map((bar) => (
-                  <rect
-                    key={`bar-stack-${barStack.index}-${bar.index}`}
-                    x={bar.x}
-                    y={bar.y}
-                    height={bar.height}
-                    width={bar.width}
-                    fill={
-                      circles.includes(bar.bar.data.circle)
-                        ? shadeColor(bar.color, -20)
-                        : bar.color
-                    }
-                    onClick={() => {
-                      selectCircle(bar.bar.data.circle);
-                    }}
-                    onMouseEnter={() => {
-                      showTooltip({
-                        tooltipData: bar,
-                        tooltipLeft: bar.x,
-                        tooltipTop: bar.y,
-                      });
-                    }}
-                    onMouseLeave={() => {
-                      hideTooltip();
-                    }}
-                  />
-                ))
-              )
-            }
-          </BarStack>
-        </Group>
-        <AxisBottom
-          top={yMax}
-          scale={xScale}
-          stroke={purple1}
-          tickStroke={purple1}
-          tickLabelProps={{
-            fill: purple1,
-            fontSize: 11,
-            textAnchor: "middle",
-          }}
-        />
-        {tooltipOpen && (
-          <TooltipInPortal
-            // set this to random so it correctly updates with parent bounds
-            key={Math.random()}
-            top={tooltipTop}
-            left={tooltipLeft}
-          >
-            {tooltipData && (
-              <div>
-                <strong>Kreis: {tooltipData.bar.data.circle}</strong>
-                <br />
-                <strong>Statistik: {tooltipData.key}</strong>
-                <br />
-                Relativer Wert:{" "}
-                {Number(tooltipData.bar.data[tooltipData.key]).toFixed(2)}
-                <br />
-                Absoluter Wert:{" "}
-                {
-                  absoluteValuesWithKeys[
-                    tooltipData.key + tooltipData.bar.data.circle
-                  ]
-                }
-              </div>
-            )}
-          </TooltipInPortal>
-        )}
-      </svg>
+          />
+          {tooltipOpen && (
+            <TooltipInPortal
+              // set this to random so it correctly updates with parent bounds
+              key={Math.random()}
+              top={tooltipTop}
+              left={tooltipLeft}
+            >
+              {tooltipData && (
+                <div>
+                  <strong>Kreis: {tooltipData.bar.data.circle}</strong>
+                  <br />
+                  <strong>Statistik: {tooltipData.key}</strong>
+                  <br />
+                  Relativer Wert:{" "}
+                  {Number(tooltipData.bar.data[tooltipData.key]).toFixed(2)}
+                  <br />
+                  Absoluter Wert:{" "}
+                  {
+                    absoluteValuesWithKeys[
+                      tooltipData.key + tooltipData.bar.data.circle
+                    ]
+                  }
+                </div>
+              )}
+            </TooltipInPortal>
+          )}
+        </svg>
+      </Stack>
     </Card>
   );
 }
