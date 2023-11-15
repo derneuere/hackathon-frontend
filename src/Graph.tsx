@@ -47,6 +47,7 @@ export function Graph({ width, height }: BarsProps) {
       county: "Brandenburg", // Use the selected county
       circle: item.regionalGliederung || "", // This is a number!
       value: item.normierterWert || 0,
+      absolute: item.absoluterWert || 0,
     };
     return graphData;
   });
@@ -58,6 +59,11 @@ export function Graph({ width, height }: BarsProps) {
     (state) => state
   );
   const keys = [...new Set(graphData.map((item) => item.name))];
+  const absoluteValuesWithKeys = {};
+  graphData.forEach((item) => {
+    const keyName = item.name + item.circle;
+    absoluteValuesWithKeys[keyName] = item.absolute;
+  });
 
   const transformedData = graphData
     .filter((item) => item.county === countys[0])
@@ -73,10 +79,6 @@ export function Graph({ width, height }: BarsProps) {
       const weight = variable?.selected ? variable?.weight : 1;
 
       if (existingItem) {
-        // Check if a key with name item.name exists
-        const existingKey = Object.keys(existingItem).find(
-          (key) => key === item.name
-        );
         // If the key doesn't exist, create a new entry
         existingItem[item.name] = item.value * weight;
       } else {
@@ -102,6 +104,10 @@ export function Graph({ width, height }: BarsProps) {
 
     return aTotal - bTotal;
   });
+
+  const largestTotal = Object.values(
+    transformedData[transformedData.length - 1]
+  ).reduce((acc, value) => acc + parseFloat(value) || 0, 0);
 
   const originalData = transformedData;
   let data = originalData;
@@ -158,7 +164,7 @@ export function Graph({ width, height }: BarsProps) {
   const yScale = scaleLinear<number>({
     range: [yMax, 0],
     round: true,
-    domain: [0, 3],
+    domain: [0, largestTotal],
   });
 
   const colorScale = scaleOrdinal<string, string>({
@@ -274,6 +280,13 @@ export function Graph({ width, height }: BarsProps) {
                 <br />
                 Relativer Wert:{" "}
                 {Number(tooltipData.bar.data[tooltipData.key]).toFixed(2)}
+                <br />
+                Absoluter Wert:{" "}
+                {
+                  absoluteValuesWithKeys[
+                    tooltipData.key + tooltipData.bar.data.circle
+                  ]
+                }
               </div>
             )}
           </TooltipInPortal>

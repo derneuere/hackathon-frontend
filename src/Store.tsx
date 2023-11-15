@@ -11,6 +11,7 @@ export type GraphData = {
   circle: string;
   county: string;
   value: number;
+  absolute: number;
 };
 
 interface StatisticState {
@@ -30,54 +31,63 @@ export const useStatisticsStore = create<StatisticState>((set) => ({
       county: "Brandenburg",
       circle: "Brandenburg-Havel",
       value: 0.4,
+      absolute: 5621,
     },
     {
       name: "Anzahl der Grundschulen",
       county: "Brandenburg",
       circle: "Brandenburg-Havel",
       value: 0.1,
+      absolute: 10,
     },
     {
       name: "Gästeübernachtungen",
       county: "Brandenburg",
       circle: "Brandenburg-Havel",
       value: 0.1,
+      absolute: 1000,
     },
     {
       name: "Durchschnittlicher Kaufwert je qm",
       county: "Brandenburg",
       circle: "Potsdam",
       value: 0.1,
+      absolute: 1000,
     },
     {
       name: "Anzahl der Grundschulen",
       county: "Brandenburg",
       circle: "Potsdam",
       value: 0.4,
+      absolute: 5621,
     },
     {
       name: "Gästeübernachtungen",
       county: "Brandenburg",
       circle: "Potsdam",
       value: 0.5,
+      absolute: 10,
     },
     {
       name: "Durchschnittlicher Kaufwert je qm",
       county: "Brandenburg",
       circle: "Barnim",
       value: 0.2,
+      absolute: 1000,
     },
     {
       name: "Anzahl der Grundschulen",
       county: "Brandenburg",
       circle: "Barnim",
       value: 0.5,
+      absolute: 5621,
     },
     {
       name: "Gästeübernachtungen",
       county: "Brandenburg",
       circle: "Barnim",
       value: 0.1,
+      absolute: 10,
     },
   ],
   countys: ["Brandenburg"],
