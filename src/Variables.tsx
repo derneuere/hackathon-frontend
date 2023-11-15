@@ -63,7 +63,18 @@ export function Variables({ openSubscribe }: VariablesProps) {
                 {item.title}
               </Text>
             </div>
-            <ActionIcon variant="filled" color={item.color}>
+            <ActionIcon
+              variant="filled"
+              color={item.color}
+              onClick={() => {
+                addVariable({
+                  name: item.title,
+                  weight: 1,
+                  selected: true,
+                });
+                close();
+              }}
+            >
               <IconPlus></IconPlus>
             </ActionIcon>
           </Flex>

@@ -21,6 +21,7 @@ interface StatisticState {
   circles: string[];
   selectedVariable: string;
   addVariable: (variable: Variable) => void;
+  removeVariable: (variable: Variable) => void;
   changeVariable: (variable: Variable) => void;
   changeCounty: (county: string) => void;
   selectCircle: (circle: string) => void;
@@ -99,6 +100,10 @@ export const useStatisticsStore = create<StatisticState>((set) => ({
   circles: [],
   addVariable: (variable) =>
     set((state) => ({ variables: [...state.variables, variable] })),
+  removeVariable: (variable) =>
+    set((state) => ({
+      variables: state.variables.filter((item) => item.name !== variable.name),
+    })),
   changeVariable: (variable) =>
     set((state) => ({
       variables: state.variables.map((item) =>

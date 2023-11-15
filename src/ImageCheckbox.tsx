@@ -11,7 +11,7 @@ import {
 
 import classes from "./ImageCheckbox.module.css";
 import { useStatisticsStore } from "./Store";
-import { IconBell } from "@tabler/icons-react";
+import { IconBell, IconX } from "@tabler/icons-react";
 
 interface ImageCheckboxProps {
   title: string;
@@ -32,9 +32,8 @@ export function ImageCheckbox({
   ...others
 }: ImageCheckboxProps &
   Omit<React.ComponentPropsWithoutRef<"button">, keyof ImageCheckboxProps>) {
-  const { variables, changeVariable, selectVariable } = useStatisticsStore(
-    (state) => state
-  );
+  const { variables, changeVariable, selectVariable, removeVariable } =
+    useStatisticsStore((state) => state);
 
   const item = variables.find((item) => item.name === title);
 
@@ -127,6 +126,9 @@ export function ImageCheckbox({
             </Slider>
           </div>
         </Flex>
+        <ActionIcon style={{ position: "absolute", top: 0, right: 0 }}>
+          <IconX onClick={() => removeVariable(item)}></IconX>
+        </ActionIcon>
       </Card>
     </UnstyledButton>
   );
