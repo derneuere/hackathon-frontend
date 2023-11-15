@@ -6,6 +6,8 @@ import {
   Stack,
   SimpleGrid,
   Flex,
+  Slider,
+  Group,
 } from "@mantine/core";
 import { useElementSize, useViewportSize } from "@mantine/hooks";
 import BarGraph from "./Graph";
@@ -36,7 +38,9 @@ const mockdata = [
 ];
 
 function App() {
-  const { variables, addVariable } = useStatisticsStore((state) => state);
+  const { variables, circles, graphData, addVariable } = useStatisticsStore(
+    (state) => state
+  );
 
   if (variables.length === 0) {
     mockdata.map((item) =>
@@ -103,6 +107,32 @@ function App() {
             {items}
           </SimpleGrid>
         </Flex>
+
+        <Card shadow="sm" padding="lg" radius="md" withBorder>
+          <Stack>
+            {circles.map((circle) => (
+              <Stack>
+                <Title order={3}>Kreis: {circle}</Title>
+                <Group>
+                  {graphData
+                    .filter((i) => i.circle === circle)
+                    .map((i) => (
+                      <Card shadow="sm" padding="lg" radius="md" withBorder>
+                        <Stack mih={50} miw={290} spacing={"xs"}>
+                          <Text size="sm" c="dimmed">
+                            {i.name}
+                          </Text>
+                          <Text size="md">{i.absolute}</Text>
+                          <Slider value={i.value} max={1}></Slider>
+                        </Stack>
+                      </Card>
+                    ))}
+                </Group>
+              </Stack>
+            ))}
+          </Stack>
+        </Card>
+        <div style={{ height: 100 }}></div>
         {debug &&
           variables.map((variable) => (
             <Text key={variable.name} component="span" inherit>
