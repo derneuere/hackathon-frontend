@@ -10,6 +10,7 @@ import {
   Modal,
   TextInput,
   ActionIcon,
+  Container,
 } from "@mantine/core";
 import {
   useElementSize,
@@ -92,13 +93,13 @@ function App() {
         backgroundColor: "#FFFFFF",
       }}
     >
-      <Stack align="center" justify="flex-end">
+      <Stack align="center">
         <Center>
           <div>
-            <Title variant="gradient" weight={700} align="center" size="50">
+            <Title variant="gradient" align="center" size="50">
               Die Datenbrauerei
             </Title>
-            <Text c="dimmed" mt="md">
+            <Text c="dimmed" size="lg">
               Auf der{" "}
               <Text component="span" inherit variant="gradient">
                 Spur
@@ -107,10 +108,11 @@ function App() {
             </Text>
           </div>
         </Center>
+        <div style={{ height: 25 }}></div>
         <Flex
-          gap="md"
+          gap="xl"
           justify="flex-start"
-          align="center"
+          align="flex-start"
           direction={{ base: "column", sm: "row" }}
           wrap="wrap"
         >
