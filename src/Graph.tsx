@@ -18,6 +18,7 @@ import { fetchGetErgebnisFuerMerkmal } from "./client/datenbrauereiComponents";
 import { useQueries } from "@tanstack/react-query";
 // To-Do: Add animation
 import { useSpring, animated } from "react-spring";
+import { mockdata } from "./Helper";
 
 // Sort data by frequency
 const verticalMargin = 25;
@@ -68,13 +69,16 @@ export function Graph({ width, height }: BarsProps) {
   const { changeCounty, countys, variables, circles, selectCircle } =
     useStatisticsStore((state) => state);
   const setGraphData = useGraphDataStore((state) => state.setGraphData);
-
-  const queries = variables.map((variable, index) => {
+  const queries = variables.map((variable) => {
     return {
-      queryKey: ["getErgebnisFuerMerkmal", index],
+      queryKey: ["getErgebnisFuerMerkmal", variable.name],
       queryFn: () =>
         fetchGetErgebnisFuerMerkmal({
-          pathParams: { name: variable.name },
+          pathParams: {
+            name:
+              mockdata.find((item) => item.title === variable.name)?.querykey ||
+              "",
+          },
         }),
       staleTime: Infinity,
     };
@@ -84,12 +88,15 @@ export function Graph({ width, height }: BarsProps) {
     queries: queries,
   });
   const resultData = results.map((item) => item.data);
+  console.log(resultData);
 
   // Map AbfrageErgebnis to GraphData
   const maybeArray = resultData.map((singleResult) =>
     singleResult?.merkmalErgebnisse?.map((item) => {
       const graphData: GraphData = {
-        name: singleResult.abfrageId || "", // Use the requested merkmal
+        name:
+          mockdata.find((item) => item.querykey === singleResult.abfrageId)
+            ?.title || "", // Use the requested merkmal
         county: "Brandenburg", // Use the selected county
         circle: item.regionalGliederungLabel || "",
         value: item.normierterWert || 0,

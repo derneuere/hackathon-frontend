@@ -10,12 +10,14 @@ export const mockdata = [
     title: "Durchschnittlicher Kaufwert je qm",
     icon: <IconHomeSearch />,
     color: "theme-blue-green.0",
+    querykey: "baulandpreis",
   },
   {
     description: "Allgemeinbildende Schulen",
     title: "Anzahl der Grundschulen",
     icon: <IconBackpack />,
     color: "theme-green.0",
+    querykey: "grundschule",
   },
   {
     description: "Tourismus",
@@ -23,12 +25,6 @@ export const mockdata = [
     icon: <IconPlaneDeparture />,
     color: "theme-light-blue.0",
     darkerColor: "theme-light-blue.2",
-  },
-  {
-    description: "Tourismus",
-    title: "Gästeübernachtungen Part 2",
-    icon: <IconPlaneDeparture />,
-    color: "theme-light-blue.0",
-    darkerColor: "theme-light-blue.2",
+    querykey: "gaesteuebernachtung",
   },
 ];
