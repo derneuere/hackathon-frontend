@@ -14,7 +14,7 @@ import {
 import { IconSend } from "@tabler/icons-react";
 import { mockdata } from "./Helper";
 
-import { useStatisticsStore } from "./Store";
+import { useStatisticsStore, useGraphDataStore } from "./Store";
 import {
   RegistriereMitIndexVariables,
   useRegistriereMitIndex,
@@ -29,10 +29,26 @@ type SubscribeProps = {
 
 export function ModalSubscribe({ opened, close }: SubscribeProps) {
   const { selectedVariable } = useStatisticsStore((state) => state);
+  const { graphData } = useGraphDataStore((state) => state);
   const [email, setEmail] = useState("");
-  const [schwellwert, setSchwellwert] = useState(0);
   const selectedVariableMockdata = mockdata.find(
     (item) => item.title === selectedVariable
+  );
+
+  const selectedVariableGraphData = graphData
+    .filter((item) => item.name === selectedVariable)
+    .map((i) => i.absolute)
+    .sort();
+
+  const maxValueForSelectedVariable =
+    selectedVariableGraphData[selectedVariableGraphData.length - 1] * 1.5;
+  const minValueForSelectedVariable = selectedVariableGraphData[0] * 0.75;
+
+  console.log(maxValueForSelectedVariable);
+  console.log(minValueForSelectedVariable);
+
+  const [schwellwert, setSchwellwert] = useState(
+    maxValueForSelectedVariable + minValueForSelectedVariable / 2
   );
 
   const registriereMitIndexMutation = useRegistriereMitIndex();
@@ -98,6 +114,18 @@ export function ModalSubscribe({ opened, close }: SubscribeProps) {
             value={schwellwert}
             onChange={setSchwellwert}
             color={selectedVariableMockdata?.color}
+            min={minValueForSelectedVariable}
+            max={maxValueForSelectedVariable}
+            marks={[
+              {
+                value: minValueForSelectedVariable,
+                label: `Min: ${minValueForSelectedVariable}`,
+              },
+              {
+                value: maxValueForSelectedVariable,
+                label: `Max: ${maxValueForSelectedVariable}`,
+              },
+            ]}
           ></Slider>
         </Card>
 

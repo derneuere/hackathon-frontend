@@ -29,7 +29,7 @@ export function SubscribeCard() {
           </Title>
 
           <TextInput
-            label={<Text c="dimmed">Gebe deinen Index einen Namen!</Text>}
+            label={<Text c="dimmed">Gib deinem Index einen Namen!</Text>}
             value={name}
             onChange={(event) => setName(event.currentTarget.value)}
           ></TextInput>
