@@ -81,7 +81,7 @@ export function ModalSubscribe({ opened, close }: SubscribeProps) {
           einem Kreis unter- oder überschritten wird.
         </Text>
 
-        <Card shadow="sm" padding="lg" radius="md" withBorder>
+        <Card shadow="sm" padding="xl" radius="md" withBorder>
           <Flex
             mih={50}
             miw={290}

@@ -34,52 +34,47 @@ export function Variables({ openSubscribe }: VariablesProps) {
     ));
 
   const modalItems = nonSelectedMockdata.map((item) => (
-    <Card>
-      {" "}
-      <UnstyledButton>
-        <Card shadow="sm" padding="lg" radius="md" withBorder>
-          <Flex
-            mih={40}
-            miw={300}
-            gap="md"
-            justify="center"
-            align="center"
-            direction="row"
-            wrap="wrap"
+    <Card shadow="sm" padding="xl" radius="md" withBorder>
+      <Flex
+        mih={40}
+        miw={300}
+        gap="md"
+        justify="center"
+        align="center"
+        direction="row"
+        wrap="wrap"
+      >
+        <ActionIcon variant="filled" color={item.color}>
+          {item.icon}
+        </ActionIcon>
+        <div>
+          <Text c="dimmed" size="xs" lh={1} mb={5}>
+            {item.description}
+          </Text>
+          <Text
+            fw={500}
+            size="sm"
+            color={item.darkerColor ? item.darkerColor : item.color}
+            lh={1}
           >
-            <ActionIcon variant="filled" color={item.color}>
-              {item.icon}
-            </ActionIcon>
-            <div>
-              <Text c="dimmed" size="xs" lh={1} mb={5}>
-                {item.description}
-              </Text>
-              <Text
-                fw={500}
-                size="sm"
-                color={item.darkerColor ? item.darkerColor : item.color}
-                lh={1}
-              >
-                {item.title}
-              </Text>
-            </div>
-            <ActionIcon
-              variant="filled"
-              color={item.color}
-              onClick={() => {
-                addVariable({
-                  name: item.title,
-                  weight: 1,
-                  selected: true,
-                });
-                close();
-              }}
-            >
-              <IconPlus></IconPlus>
-            </ActionIcon>
-          </Flex>
-        </Card>
-      </UnstyledButton>
+            {item.title}
+          </Text>
+        </div>
+        <ActionIcon
+          variant="filled"
+          color={item.color}
+          onClick={() => {
+            addVariable({
+              name: item.title,
+              weight: 1,
+              selected: true,
+            });
+            close();
+          }}
+        >
+          <IconPlus></IconPlus>
+        </ActionIcon>
+      </Flex>
     </Card>
   ));
 
