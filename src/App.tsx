@@ -7,20 +7,36 @@ import { Variables } from "./Variables";
 import { ModalSubscribe } from "./ModalSubscribe";
 import { CircleDetails } from "./CircleDetails";
 import { SubscribeCard } from "./SubscribeCard";
+import { useLocation } from "react-router-dom";
 
 function App() {
+  const { search } = useLocation();
+  const query = new URLSearchParams(search);
+  const chosenVariables = query.get("variables")?.split(",");
+  const weights = query.get("weights")?.split(",");
+
   const [opened, { open, close }] = useDisclosure(false);
   const { variables, addVariable } = useStatisticsStore((state) => state);
   const isMobile = useMediaQuery("(max-width: 768px)");
 
   if (variables.length === 0) {
-    mockdata.map((item) =>
-      addVariable({
-        name: item.title,
-        weight: 1,
-        selected: true,
-      })
-    );
+    if (chosenVariables && weights) {
+      chosenVariables.forEach((item, index) =>
+        addVariable({
+          name: mockdata.find((x) => x.querykey === item)?.title || "",
+          weight: parseInt(weights[index]),
+          selected: true,
+        })
+      );
+    } else {
+      mockdata.map((item) =>
+        addVariable({
+          name: item.title,
+          weight: 1,
+          selected: true,
+        })
+      );
+    }
   }
 
   const { width } = useViewportSize();

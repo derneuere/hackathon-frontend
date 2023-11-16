@@ -25,6 +25,7 @@
     "@visx/tooltip": "^3.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^6.18.0",
     "react-spring": "^9.7.3",
     "zustand": "^4.4.6"
   },
