@@ -76,18 +76,24 @@ function App() {
           direction={{ base: "column", sm: "row" }}
           wrap="wrap"
         >
-          <BarGraph
-            width={
-              isMobile ? Math.min(width - 50, 900) : Math.min(width - 500, 900)
-            }
-            height={Math.min(400, 400)}
-          />
+          <Center>
+            <BarGraph
+              width={
+                isMobile
+                  ? Math.min(width - 75, 900)
+                  : Math.min(width - 500, 900)
+              }
+              height={Math.min(400, 400)}
+            />
+          </Center>
           <Variables openSubscribe={open} />
         </Flex>
         <CircleDetails></CircleDetails>
-        <SubscribeCard></SubscribeCard>
+        <div style={{ padding: 25 }}>
+          <SubscribeCard></SubscribeCard>
+        </div>
 
-        <div style={{ height: 100 }}></div>
+        <div style={{ height: 50 }}></div>
       </Stack>
       <ModalSubscribe opened={opened} close={close} />
     </div>
