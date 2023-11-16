@@ -60,7 +60,7 @@ function App() {
             <Title variant="gradient" align="center" size="50">
               Die Datenbrauerei
             </Title>
-            <Text c="dimmed" size="lg">
+            <Text c="dimmed" size="lg" align="center">
               Auf der{" "}
               <Text component="span" inherit variant="gradient">
                 Spur
@@ -78,7 +78,7 @@ function App() {
         >
           <BarGraph
             width={
-              isMobile ? Math.min(width - 100, 900) : Math.min(width - 500, 900)
+              isMobile ? Math.min(width - 50, 900) : Math.min(width - 500, 900)
             }
             height={Math.min(400, 400)}
           />
