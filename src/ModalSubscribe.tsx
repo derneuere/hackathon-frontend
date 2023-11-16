@@ -19,6 +19,9 @@ import {
   RegistriereMitIndexVariables,
   useRegistriereMitIndex,
 } from "./client/datenbrauereiComponents";
+
+import { notifications } from "@mantine/notifications";
+
 type SubscribeProps = {
   opened: boolean;
   close: () => void;
@@ -125,6 +128,15 @@ export function ModalSubscribe({ opened, close }: SubscribeProps) {
                     },
                   };
                   registriereMitIndexMutation.mutate(formData);
+                  notifications.show({
+                    title: "Schwellenwert aboniert",
+                    message:
+                      "Wir informieren dich sobald der Wert unter oder überschritten wird!",
+                    color: "green",
+                  });
+                  setEmail("");
+                  setSchwellwert(1);
+                  close();
                 }}
               />
             </ActionIcon>

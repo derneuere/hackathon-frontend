@@ -231,7 +231,11 @@ export function Graph({ width, height }: BarsProps) {
   });
 
   const colorScale = scaleOrdinal<string, string>({
-    domain: data.map((d) => Object.keys(d)[1]),
+    domain: [
+      "Durchschnittlicher Kaufwert je qm",
+      "Anzahl der Grundschulen",
+      "Gästeübernachtungen",
+    ],
     range: [purple1, purple2, purple3],
   });
 
@@ -304,7 +308,8 @@ export function Graph({ width, height }: BarsProps) {
                       fill={
                         circles.includes(bar.bar.data.circle)
                           ? shadeColor(bar.color, -20)
-                          : bar.color
+                          : mockdata.find((item) => item.querykey === bar.key)
+                              ?.barcolor
                       }
                       onClick={() => {
                         selectCircle(bar.bar.data.circle);
