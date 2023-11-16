@@ -6,7 +6,7 @@ import { useGraphDataStore, useStatisticsStore } from "./Store";
 export function SubscribeCard() {
   const { circles } = useStatisticsStore((state) => state);
   const { graphData } = useGraphDataStore((state) => state);
-
+  //test
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
       <Stack>
