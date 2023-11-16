@@ -39,101 +39,99 @@ export function ImageCheckbox({
   const item = variables.find((item) => item.name === title);
 
   return (
-    <UnstyledButton {...others} className={classes.button}>
-      <Card shadow="sm" padding="lg" radius="md" withBorder>
-        <Flex
-          mih={50}
-          miw={290}
-          gap="md"
-          justify="flex-start"
-          align="flex-start"
-          direction="row"
-          wrap="wrap"
-        >
-          <Checkbox
-            checked={item?.selected}
+    <Card shadow="sm" padding="xl" radius="md" withBorder>
+      <Flex
+        mih={50}
+        miw={290}
+        gap="md"
+        justify="flex-start"
+        align="flex-start"
+        direction="row"
+        wrap="wrap"
+      >
+        <Checkbox
+          checked={item?.selected}
+          color={color}
+          onChange={() => {
+            changeVariable({
+              name: title,
+              weight: item?.weight || 0,
+              selected: !item?.selected || false,
+            });
+          }}
+          tabIndex={-1}
+          styles={{ input: { cursor: "pointer" } }}
+        />
+        <div>
+          <Flex
+            mih={50}
+            miw={300}
+            gap="md"
+            justify="flex-start"
+            align="flex-start"
+            direction="row"
+            wrap="wrap"
+          >
+            <ActionIcon variant="filled" color={color}>
+              {icon}
+            </ActionIcon>
+
+            <div className={classes.body}>
+              <Text c="dimmed" size="xs" lh={1} mb={5}>
+                {description}
+              </Text>
+              <Text
+                fw={500}
+                size="sm"
+                color={darkerColor ? darkerColor : color}
+                lh={1}
+              >
+                {title}
+              </Text>
+            </div>
+
+            <ActionIcon
+              variant="light"
+              color="yellow"
+              onClick={() => {
+                selectVariable(title);
+                open();
+              }}
+            >
+              <IconBell></IconBell>
+            </ActionIcon>
+          </Flex>
+          <Slider
+            disabled={!item?.selected}
+            step={1}
+            min={0}
+            max={3}
+            marks={[
+              { value: 0, label: "0" },
+              { value: 1, label: "1" },
+              { value: 2, label: "2" },
+              { value: 3, label: "3" },
+            ]}
             color={color}
-            onChange={() => {
+            value={item?.weight}
+            onChange={(i: number) =>
               changeVariable({
                 name: title,
-                weight: item?.weight || 0,
-                selected: !item?.selected || false,
-              });
-            }}
-            tabIndex={-1}
-            styles={{ input: { cursor: "pointer" } }}
-          />
-          <div>
-            <Flex
-              mih={50}
-              miw={300}
-              gap="md"
-              justify="flex-start"
-              align="flex-start"
-              direction="row"
-              wrap="wrap"
-            >
-              <ActionIcon variant="filled" color={color}>
-                {icon}
-              </ActionIcon>
-
-              <div className={classes.body}>
-                <Text c="dimmed" size="xs" lh={1} mb={5}>
-                  {description}
-                </Text>
-                <Text
-                  fw={500}
-                  size="sm"
-                  color={darkerColor ? darkerColor : color}
-                  lh={1}
-                >
-                  {title}
-                </Text>
-              </div>
-
-              <ActionIcon
-                variant="light"
-                color="yellow"
-                onClick={() => {
-                  selectVariable(title);
-                  open();
-                }}
-              >
-                <IconBell></IconBell>
-              </ActionIcon>
-            </Flex>
-            <Slider
-              disabled={!item?.selected}
-              step={1}
-              min={0}
-              max={3}
-              marks={[
-                { value: 0, label: "0" },
-                { value: 1, label: "1" },
-                { value: 2, label: "2" },
-                { value: 3, label: "3" },
-              ]}
-              color={color}
-              value={item?.weight}
-              onChange={(i: number) =>
-                changeVariable({
-                  name: title,
-                  weight: i,
-                  selected: item?.selected || false,
-                })
-              }
-            >
-              {" "}
-            </Slider>
-          </div>
-        </Flex>
-        <ActionIcon
-          size={"xs"}
-          style={{ position: "absolute", top: 0, right: 2 }}
-        >
-          <IconX onClick={() => removeVariable(item)}></IconX>
-        </ActionIcon>
-      </Card>
-    </UnstyledButton>
+                weight: i,
+                selected: item?.selected || false,
+              })
+            }
+          >
+            {" "}
+          </Slider>
+        </div>
+      </Flex>
+      <ActionIcon
+        size={"xs"}
+        style={{ position: "absolute", top: 0, right: 2 }}
+      >
+        <IconX onClick={() => removeVariable(item)}></IconX>
+      </ActionIcon>
+    </Card>
   );
 }

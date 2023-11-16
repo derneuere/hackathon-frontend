@@ -72,8 +72,7 @@ function App() {
         <div style={{ height: 25 }}></div>
         <Flex
           gap="xl"
-          justify="flex-start"
-          align="flex-start"
+          justify={{ base: "flex-start", sm: "center" }}
           direction={{ base: "column", sm: "row" }}
           wrap="wrap"
         >

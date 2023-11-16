@@ -85,7 +85,7 @@ export function Variables({ openSubscribe }: VariablesProps) {
 
   return (
     <div>
-      <Stack>
+      <Stack align={"center"}>
         <div>
           <Title>Themenauswahl</Title>
           <Text c="dimmed">Welchen Merkmale willst du vergleichen?</Text>
