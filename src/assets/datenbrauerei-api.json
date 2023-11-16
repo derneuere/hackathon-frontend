@@ -1,234 +1,457 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "Die Datenbrauerei",
-    "description": "Don't call us, we ll call ya!",
-    "contact": { "name": "Die Datenbrauerei" },
-    "version": "1.0.0"
+      "title": "Die Datenbrauerei",
+      "description": "Don't call us, we ll call ya!",
+      "contact": {
+          "name": "Die Datenbrauerei"
+      },
+      "version": "1.0.0"
   },
   "servers": [
-    { "url": "http://localhost:8080", "description": "Generated server url" }
+      {
+          "url": "http://172.21.63.109:8080",
+          "description": "Generated server url"
+      }
   ],
   "paths": {
-    "/merkmal/{name}": {
-      "get": {
-        "tags": ["Merkmal"],
-        "summary": "Liefert die RegDB Metadaten des Merkmals",
-        "operationId": "getMerkmal",
-        "parameters": [
-          {
-            "name": "name",
-            "in": "path",
-            "description": "Merkmalname (die vereinfachte Variante von der Datenbrauerei)",
-            "required": true,
-            "schema": { "type": "string" }
+      "/abo": {
+          "post": {
+              "tags": [
+                  "Abo"
+              ],
+              "summary": "Ich habe Interesse an das Abo!",
+              "operationId": "registriereMitIndex",
+              "requestBody": {
+                  "content": {
+                      "application/json": {
+                          "schema": {
+                              "$ref": "#/components/schemas/AboStammdaten"
+                          }
+                      }
+                  },
+                  "required": true
+              },
+              "responses": {
+                  "200": {
+                      "description": "Erfolgreich, die Abonnenteninfos wurden angelegt",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/AboStammdaten"
+                              }
+                          }
+                      }
+                  },
+                  "400": {
+                      "description": "Ungueltige Anfrage",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/Error"
+                              }
+                          }
+                      }
+                  },
+                  "401": {
+                      "description": "Unerlaubter Zugriff auf Ressourcen",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/Error"
+                              }
+                          }
+                      }
+                  },
+                  "500": {
+                      "description": "Laufzeitfehler",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/Error"
+                              }
+                          }
+                      }
+                  }
+              }
           }
-        ],
-        "responses": {
-          "200": {
-            "description": "Erfolgreich, die Metadaten werden mitgeteilt",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/AbfrageErgebnis" }
+      },
+      "/merkmal/{name}": {
+          "get": {
+              "tags": [
+                  "Merkmal"
+              ],
+              "summary": "Liefert die RegDB Metadaten des Merkmals",
+              "operationId": "getMerkmal",
+              "parameters": [
+                  {
+                      "name": "name",
+                      "in": "path",
+                      "description": "Merkmalname (die vereinfachte Variante von der Datenbrauerei)",
+                      "required": true,
+                      "schema": {
+                          "type": "string"
+                      }
+                  }
+              ],
+              "responses": {
+                  "200": {
+                      "description": "Erfolgreich, die Metadaten werden mitgeteilt",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/AbfrageErgebnis"
+                              }
+                          }
+                      }
+                  },
+                  "400": {
+                      "description": "Ungueltige Anfrage",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/Error"
+                              }
+                          }
+                      }
+                  },
+                  "401": {
+                      "description": "Unerlaubter Zugriff auf Ressourcen",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/Error"
+                              }
+                          }
+                      }
+                  },
+                  "500": {
+                      "description": "Laufzeitfehler",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/Error"
+                              }
+                          }
+                      }
+                  }
               }
-            }
-          },
-          "400": {
-            "description": "Ungueltige Anfrage",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/Error" }
-              }
-            }
-          },
-          "401": {
-            "description": "Unerlaubter Zugriff auf Ressourcen",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/Error" }
-              }
-            }
-          },
-          "500": {
-            "description": "Laufzeitfehler",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/Error" }
-              }
-            }
           }
-        }
+      },
+      "/ergebnisFuerMerkmal/{name}": {
+          "get": {
+              "tags": [
+                  "Ergebnis"
+              ],
+              "summary": "Gibt das Ergebnis zu einem Merkmal",
+              "operationId": "getErgebnisFuerMerkmal",
+              "parameters": [
+                  {
+                      "name": "name",
+                      "in": "path",
+                      "description": "Merkmalname",
+                      "required": true,
+                      "schema": {
+                          "type": "string"
+                      }
+                  }
+              ],
+              "responses": {
+                  "200": {
+                      "description": "Erfolgreich, das Ergebnis wird mitgeteilt",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/AbfrageErgebnis"
+                              }
+                          }
+                      }
+                  },
+                  "400": {
+                      "description": "Ungueltige Anfrage",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/Error"
+                              }
+                          }
+                      }
+                  },
+                  "401": {
+                      "description": "Unerlaubter Zugriff auf Ressourcen",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/Error"
+                              }
+                          }
+                      }
+                  },
+                  "500": {
+                      "description": "Laufzeitfehler",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/Error"
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+      },
+      "/ergebnis/{id}": {
+          "get": {
+              "tags": [
+                  "Ergebnis"
+              ],
+              "summary": "Gibt das Ergebnis einer Abfrage zur Abo",
+              "operationId": "getAbfrageErgebnis",
+              "parameters": [
+                  {
+                      "name": "id",
+                      "in": "path",
+                      "description": "UUID der Abfrage",
+                      "required": true,
+                      "schema": {
+                          "type": "string"
+                      }
+                  }
+              ],
+              "responses": {
+                  "200": {
+                      "description": "Erfolgreich, die Ergebnisse werden mitgeteilt",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/AbfrageErgebnis"
+                              }
+                          }
+                      }
+                  },
+                  "400": {
+                      "description": "Ungueltige Anfrage",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/Error"
+                              }
+                          }
+                      }
+                  },
+                  "401": {
+                      "description": "Unerlaubter Zugriff auf Ressourcen",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/Error"
+                              }
+                          }
+                      }
+                  },
+                  "500": {
+                      "description": "Laufzeitfehler",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/Error"
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+      },
+      "/abo/{id}": {
+          "get": {
+              "tags": [
+                  "Abo"
+              ],
+              "summary": "Was habe ich abonniert?",
+              "operationId": "getAboSetup",
+              "parameters": [
+                  {
+                      "name": "id",
+                      "in": "path",
+                      "description": "UUID des Abo",
+                      "required": true,
+                      "schema": {
+                          "type": "string"
+                      }
+                  }
+              ],
+              "responses": {
+                  "200": {
+                      "description": "Erfolgreich, die Abonnenteninfos werden mitgeteilt",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/AboSetup"
+                              }
+                          }
+                      }
+                  },
+                  "400": {
+                      "description": "Ungueltige Anfrage",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/Error"
+                              }
+                          }
+                      }
+                  },
+                  "401": {
+                      "description": "Unerlaubter Zugriff auf Ressourcen",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/Error"
+                              }
+                          }
+                      }
+                  },
+                  "500": {
+                      "description": "Laufzeitfehler",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/Error"
+                              }
+                          }
+                      }
+                  }
+              }
+          }
       }
-    },
-    "/ergebnis/{id}": {
-      "get": {
-        "tags": ["Ergebnis"],
-        "summary": "Gibt das Ergebnis einer Abfrage zur Abo",
-        "operationId": "getAbfrageErgebnis",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "UUID der Abfrage",
-            "required": true,
-            "schema": { "type": "string" }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Erfolgreich, die Ergebnisse werden mitgeteilt",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/AbfrageErgebnis" }
-              }
-            }
-          },
-          "400": {
-            "description": "Ungueltige Anfrage",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/Error" }
-              }
-            }
-          },
-          "401": {
-            "description": "Unerlaubter Zugriff auf Ressourcen",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/Error" }
-              }
-            }
-          },
-          "500": {
-            "description": "Laufzeitfehler",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/Error" }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/abo/{id}": {
-      "get": {
-        "tags": ["Abo"],
-        "summary": "Was habe ich abonniert?",
-        "operationId": "getAboSetup",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "UUID des Abo",
-            "required": true,
-            "schema": { "type": "string" }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Erfolgreich, die Abonnenteninfos werden mitgeteilt",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/AboSetup" }
-              }
-            }
-          },
-          "400": {
-            "description": "Ungueltige Anfrage",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/Error" }
-              }
-            }
-          },
-          "401": {
-            "description": "Unerlaubter Zugriff auf Ressourcen",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/Error" }
-              }
-            }
-          },
-          "500": {
-            "description": "Laufzeitfehler",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/Error" }
-              }
-            }
-          }
-        }
-      }
-    }
   },
   "components": {
-    "schemas": {
-      "AbfrageErgebnis": {
-        "type": "object",
-        "properties": {
-          "abfrageId": { "type": "string" },
-          "timestamp": { "type": "string", "format": "date-time" },
-          "merkmalErgebnisse": {
-            "type": "array",
-            "items": { "$ref": "#/components/schemas/MerkmalErgebnis" }
+      "schemas": {
+          "Abfrage": {
+              "type": "object",
+              "properties": {
+                  "uuid": {
+                      "type": "string"
+                  },
+                  "regionalerUmfang": {
+                      "type": "string"
+                  },
+                  "dimensionen": {
+                      "type": "array",
+                      "items": {
+                          "$ref": "#/components/schemas/AbfrageDimension"
+                      }
+                  },
+                  "abfrageMitSchwellwert": {
+                      "$ref": "#/components/schemas/AbfrageSchwellwert"
+                  }
+              }
+          },
+          "AbfrageDimension": {
+              "type": "object",
+              "properties": {
+                  "merkmalName": {
+                      "type": "string"
+                  },
+                  "gewichtung": {
+                      "type": "string",
+                      "enum": [
+                          "NULL",
+                          "EINS",
+                          "ZWEI",
+                          "DREI"
+                      ]
+                  }
+              }
+          },
+          "AbfrageSchwellwert": {
+              "type": "object",
+              "properties": {
+                  "merkmalName": {
+                      "type": "string"
+                  },
+                  "schwellwert": {
+                      "type": "number"
+                  }
+              }
+          },
+          "AboStammdaten": {
+              "type": "object",
+              "properties": {
+                  "uuid": {
+                      "type": "string"
+                  },
+                  "email": {
+                      "type": "string"
+                  },
+                  "name": {
+                      "type": "string"
+                  },
+                  "abfragen": {
+                      "type": "array",
+                      "items": {
+                          "$ref": "#/components/schemas/Abfrage"
+                      }
+                  }
+              }
+          },
+          "Error": {
+              "type": "object",
+              "properties": {
+                  "code": {
+                      "type": "string"
+                  },
+                  "message": {
+                      "type": "string"
+                  }
+              }
+          },
+          "AbfrageErgebnis": {
+              "type": "object",
+              "properties": {
+                  "abfrageId": {
+                      "type": "string"
+                  },
+                  "timestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                  },
+                  "merkmalErgebnisse": {
+                      "type": "array",
+                      "items": {
+                          "$ref": "#/components/schemas/MerkmalErgebnis"
+                      }
+                  }
+              }
+          },
+          "MerkmalErgebnis": {
+              "type": "object",
+              "properties": {
+                  "merkmalCode": {
+                      "type": "string"
+                  },
+                  "regionalGliederung": {
+                      "type": "string"
+                  },
+                  "regionalGliederungLabel": {
+                      "type": "string"
+                  },
+                  "normierterWert": {
+                      "type": "number"
+                  },
+                  "absoluterWert": {
+                      "type": "number"
+                  }
+              }
+          },
+          "AboSetup": {
+              "type": "object",
+              "properties": {
+                  "aboStammdaten": {
+                      "$ref": "#/components/schemas/AboStammdaten"
+                  }
+              }
           }
-        }
-      },
-      "MerkmalErgebnis": {
-        "type": "object",
-        "properties": {
-          "merkmalCode": { "type": "string" },
-          "regionalGliederung": { "type": "string" },
-          "normierterWert": { "type": "number" },
-          "absoluterWert": { "type": "number" }
-        }
-      },
-      "Error": {
-        "type": "object",
-        "properties": {
-          "code": { "type": "string" },
-          "message": { "type": "string" }
-        }
-      },
-      "Abfrage": {
-        "type": "object",
-        "properties": {
-          "uuid": { "type": "string" },
-          "regionalerUmfang": { "type": "string" },
-          "dimensionen": {
-            "type": "array",
-            "items": { "$ref": "#/components/schemas/AbfrageDimension" }
-          }
-        }
-      },
-      "AbfrageDimension": {
-        "type": "object",
-        "properties": {
-          "merkmalName": { "type": "string" },
-          "gewichtung": {
-            "type": "string",
-            "enum": ["NULL", "EINS", "ZWEI", "DREI"]
-          }
-        }
-      },
-      "AboSetup": {
-        "type": "object",
-        "properties": {
-          "aboStammdaten": { "$ref": "#/components/schemas/AboStammdaten" }
-        }
-      },
-      "AboStammdaten": {
-        "type": "object",
-        "properties": {
-          "uuid": { "type": "string" },
-          "email": { "type": "string" },
-          "name": { "type": "string" },
-          "abfragen": {
-            "type": "array",
-            "items": { "$ref": "#/components/schemas/Abfrage" }
-          }
-        }
       }
-    }
   }
 }

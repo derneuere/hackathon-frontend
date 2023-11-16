@@ -1,6 +1,6 @@
 import { DatenbrauereiContext } from "./datenbrauereiContext";
 
-const baseUrl = "http://localhost:8080";
+const baseUrl = "http://172.21.63.109:8080";
 
 export type ErrorWrapper<TError> =
   | TError
@@ -45,6 +45,7 @@ export async function datenbrauereiFetch<
   try {
     const requestHeaders: HeadersInit = {
       "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": baseUrl,
       ...headers,
     };
 

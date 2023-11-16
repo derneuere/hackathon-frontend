@@ -3,6 +3,35 @@
  *
  * @version 1.0.0
  */
+export type Abfrage = {
+  uuid?: string;
+  regionalerUmfang?: string;
+  dimensionen?: AbfrageDimension[];
+  abfrageMitSchwellwert?: AbfrageSchwellwert;
+};
+
+export type AbfrageDimension = {
+  merkmalName?: string;
+  gewichtung?: "NULL" | "EINS" | "ZWEI" | "DREI";
+};
+
+export type AbfrageSchwellwert = {
+  merkmalName?: string;
+  schwellwert?: number;
+};
+
+export type AboStammdaten = {
+  uuid?: string;
+  email?: string;
+  name?: string;
+  abfragen?: Abfrage[];
+};
+
+export type Error = {
+  code?: string;
+  message?: string;
+};
+
 export type AbfrageErgebnis = {
   abfrageId?: string;
   /**
@@ -15,33 +44,11 @@ export type AbfrageErgebnis = {
 export type MerkmalErgebnis = {
   merkmalCode?: string;
   regionalGliederung?: string;
+  regionalGliederungLabel?: string;
   normierterWert?: number;
   absoluterWert?: number;
 };
 
-export type Error = {
-  code?: string;
-  message?: string;
-};
-
-export type Abfrage = {
-  uuid?: string;
-  regionalerUmfang?: string;
-  dimensionen?: AbfrageDimension[];
-};
-
-export type AbfrageDimension = {
-  merkmalName?: string;
-  gewichtung?: "NULL" | "EINS" | "ZWEI" | "DREI";
-};
-
 export type AboSetup = {
   aboStammdaten?: AboStammdaten;
-};
-
-export type AboStammdaten = {
-  uuid?: string;
-  email?: string;
-  name?: string;
-  abfragen?: Abfrage[];
 };

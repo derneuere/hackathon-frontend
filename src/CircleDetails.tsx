@@ -1,10 +1,11 @@
 import React from "react";
 
 import { Card, Flex, Stack, Text, Title, Progress } from "@mantine/core";
-import { useStatisticsStore } from "./Store";
+import { useGraphDataStore, useStatisticsStore } from "./Store";
 
 export function CircleDetails() {
-  const { graphData, circles } = useStatisticsStore((state) => state);
+  const { circles } = useStatisticsStore((state) => state);
+  const { graphData } = useGraphDataStore((state) => state);
 
   if (circles.length === 0) {
     return <></>;

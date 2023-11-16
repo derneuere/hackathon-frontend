@@ -12,6 +12,7 @@ import {
 import classes from "./ImageCheckbox.module.css";
 import { useStatisticsStore } from "./Store";
 import { IconBell, IconX } from "@tabler/icons-react";
+import { useRegistriereMitIndex } from "./client/datenbrauereiComponents";
 
 interface ImageCheckboxProps {
   title: string;
@@ -126,7 +127,10 @@ export function ImageCheckbox({
             </Slider>
           </div>
         </Flex>
-        <ActionIcon style={{ position: "absolute", top: 0, right: 0 }}>
+        <ActionIcon
+          size={"xs"}
+          style={{ position: "absolute", top: 0, right: 2 }}
+        >
           <IconX onClick={() => removeVariable(item)}></IconX>
         </ActionIcon>
       </Card>

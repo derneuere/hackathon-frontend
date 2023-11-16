@@ -17,7 +17,6 @@ export type GraphData = {
 interface StatisticState {
   variables: Variable[];
   countys: string[];
-  graphData: GraphData[];
   circles: string[];
   selectedVariable: string;
   addVariable: (variable: Variable) => void;
@@ -28,8 +27,41 @@ interface StatisticState {
   selectVariable: (variable: string) => void;
 }
 
+interface GraphDataState {
+  graphData: GraphData[];
+  setGraphData: (data: GraphData[]) => void;
+}
+
 export const useStatisticsStore = create<StatisticState>((set) => ({
   variables: [],
+  selectedVariable: "",
+  countys: ["Brandenburg"],
+  circles: [],
+  addVariable: (variable) =>
+    set((state) => ({ variables: [...state.variables, variable] })),
+  removeVariable: (variable) =>
+    set((state) => ({
+      variables: state.variables.filter((item) => item.name !== variable.name),
+    })),
+  changeVariable: (variable) =>
+    set((state) => ({
+      variables: state.variables.map((item) =>
+        item.name === variable.name ? variable : item
+      ),
+    })),
+  changeCounty: (county) => set(() => ({ countys: [county] })),
+  selectCircle: (circle) =>
+    set((state) => {
+      if (state.circles.includes(circle)) {
+        return { circles: state.circles.filter((item) => item !== circle) };
+      } else {
+        return { circles: [...state.circles, circle] };
+      }
+    }),
+  selectVariable: (variable) => set(() => ({ selectedVariable: variable })),
+}));
+
+export const useGraphDataStore = create<GraphDataState>((set) => ({
   graphData: [
     {
       name: "Durchschnittlicher Kaufwert je qm",
@@ -95,29 +127,5 @@ export const useStatisticsStore = create<StatisticState>((set) => ({
       absolute: 10,
     },
   ],
-  selectedVariable: "",
-  countys: ["Brandenburg"],
-  circles: [],
-  addVariable: (variable) =>
-    set((state) => ({ variables: [...state.variables, variable] })),
-  removeVariable: (variable) =>
-    set((state) => ({
-      variables: state.variables.filter((item) => item.name !== variable.name),
-    })),
-  changeVariable: (variable) =>
-    set((state) => ({
-      variables: state.variables.map((item) =>
-        item.name === variable.name ? variable : item
-      ),
-    })),
-  changeCounty: (county) => set(() => ({ countys: [county] })),
-  selectCircle: (circle) =>
-    set((state) => {
-      if (state.circles.includes(circle)) {
-        return { circles: state.circles.filter((item) => item !== circle) };
-      } else {
-        return { circles: [...state.circles, circle] };
-      }
-    }),
-  selectVariable: (variable) => set(() => ({ selectedVariable: variable })),
+  setGraphData: (data) => set(() => ({ graphData: data })),
 }));

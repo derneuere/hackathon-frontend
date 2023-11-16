@@ -12,6 +12,60 @@ import type * as Fetcher from "./datenbrauereiFetcher";
 import { datenbrauereiFetch } from "./datenbrauereiFetcher";
 import type * as Schemas from "./datenbrauereiSchemas";
 
+export type RegistriereMitIndexError = Fetcher.ErrorWrapper<
+  | {
+      status: 400;
+      payload: Schemas.Error;
+    }
+  | {
+      status: 401;
+      payload: Schemas.Error;
+    }
+  | {
+      status: 500;
+      payload: Schemas.Error;
+    }
+>;
+
+export type RegistriereMitIndexVariables = {
+  body?: Schemas.AboStammdaten;
+} & DatenbrauereiContext["fetcherOptions"];
+
+export const fetchRegistriereMitIndex = (
+  variables: RegistriereMitIndexVariables,
+  signal?: AbortSignal
+) =>
+  datenbrauereiFetch<
+    Schemas.AboStammdaten,
+    RegistriereMitIndexError,
+    Schemas.AboStammdaten,
+    {},
+    {},
+    {}
+  >({ url: "/abo", method: "post", ...variables, signal });
+
+export const useRegistriereMitIndex = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      Schemas.AboStammdaten,
+      RegistriereMitIndexError,
+      RegistriereMitIndexVariables
+    >,
+    "mutationFn"
+  >
+) => {
+  const { fetcherOptions } = useDatenbrauereiContext();
+  return reactQuery.useMutation<
+    Schemas.AboStammdaten,
+    RegistriereMitIndexError,
+    RegistriereMitIndexVariables
+  >({
+    mutationFn: (variables: RegistriereMitIndexVariables) =>
+      fetchRegistriereMitIndex({ ...fetcherOptions, ...variables }),
+    ...options,
+  });
+};
+
 export type GetMerkmalPathParams = {
   /**
    * Merkmalname (die vereinfachte Variante von der Datenbrauerei)
@@ -68,6 +122,80 @@ export const useGetMerkmal = <TData = Schemas.AbfrageErgebnis>(
     }),
     queryFn: ({ signal }) =>
       fetchGetMerkmal({ ...fetcherOptions, ...variables }, signal),
+    ...options,
+    ...queryOptions,
+  });
+};
+
+export type GetErgebnisFuerMerkmalPathParams = {
+  /**
+   * Merkmalname
+   */
+  name: string;
+};
+
+export type GetErgebnisFuerMerkmalError = Fetcher.ErrorWrapper<
+  | {
+      status: 400;
+      payload: Schemas.Error;
+    }
+  | {
+      status: 401;
+      payload: Schemas.Error;
+    }
+  | {
+      status: 500;
+      payload: Schemas.Error;
+    }
+>;
+
+export type GetErgebnisFuerMerkmalVariables = {
+  pathParams: GetErgebnisFuerMerkmalPathParams;
+} & DatenbrauereiContext["fetcherOptions"];
+
+export const fetchGetErgebnisFuerMerkmal = (
+  variables: GetErgebnisFuerMerkmalVariables,
+  signal?: AbortSignal
+) =>
+  datenbrauereiFetch<
+    Schemas.AbfrageErgebnis,
+    GetErgebnisFuerMerkmalError,
+    undefined,
+    {},
+    {},
+    GetErgebnisFuerMerkmalPathParams
+  >({
+    url: "/ergebnisFuerMerkmal/{name}",
+    method: "get",
+    ...variables,
+    signal,
+  });
+
+export const useGetErgebnisFuerMerkmal = <TData = Schemas.AbfrageErgebnis>(
+  variables: GetErgebnisFuerMerkmalVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      Schemas.AbfrageErgebnis,
+      GetErgebnisFuerMerkmalError,
+      TData
+    >,
+    "queryKey" | "queryFn" | "initialData"
+  >
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } =
+    useDatenbrauereiContext(options);
+  return reactQuery.useQuery<
+    Schemas.AbfrageErgebnis,
+    GetErgebnisFuerMerkmalError,
+    TData
+  >({
+    queryKey: queryKeyFn({
+      path: "/ergebnisFuerMerkmal/{name}",
+      operationId: "getErgebnisFuerMerkmal",
+      variables,
+    }),
+    queryFn: ({ signal }) =>
+      fetchGetErgebnisFuerMerkmal({ ...fetcherOptions, ...variables }, signal),
     ...options,
     ...queryOptions,
   });
@@ -208,6 +336,11 @@ export type QueryOperation =
       path: "/merkmal/{name}";
       operationId: "getMerkmal";
       variables: GetMerkmalVariables;
+    }
+  | {
+      path: "/ergebnisFuerMerkmal/{name}";
+      operationId: "getErgebnisFuerMerkmal";
+      variables: GetErgebnisFuerMerkmalVariables;
     }
   | {
       path: "/ergebnis/{id}";

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import {
   Modal,
@@ -15,6 +15,10 @@ import { IconSend } from "@tabler/icons-react";
 import { mockdata } from "./Helper";
 
 import { useStatisticsStore } from "./Store";
+import {
+  RegistriereMitIndexVariables,
+  useRegistriereMitIndex,
+} from "./client/datenbrauereiComponents";
 type SubscribeProps = {
   opened: boolean;
   close: () => void;
@@ -22,9 +26,13 @@ type SubscribeProps = {
 
 export function ModalSubscribe({ opened, close }: SubscribeProps) {
   const { selectedVariable } = useStatisticsStore((state) => state);
+  const [email, setEmail] = useState("");
+  const [schwellwert, setSchwellwert] = useState(0);
   const selectedVariableMockdata = mockdata.find(
     (item) => item.title === selectedVariable
   );
+
+  const registriereMitIndexMutation = useRegistriereMitIndex();
 
   return (
     <Modal
@@ -83,7 +91,11 @@ export function ModalSubscribe({ opened, close }: SubscribeProps) {
               </Text>
             </div>
           </Flex>
-          <Slider color={selectedVariableMockdata?.color}></Slider>
+          <Slider
+            value={schwellwert}
+            onChange={setSchwellwert}
+            color={selectedVariableMockdata?.color}
+          ></Slider>
         </Card>
 
         <TextInput
@@ -92,10 +104,29 @@ export function ModalSubscribe({ opened, close }: SubscribeProps) {
               Wohin sollen wir Deine Benachrichtigung senden?
             </Text>
           }
+          value={email}
+          onChange={(event) => setEmail(event.currentTarget.value)}
           placeholder="Deine E-Mail Adresse"
           rightSection={
             <ActionIcon>
-              <IconSend />
+              <IconSend
+                onClick={() => {
+                  const formData: RegistriereMitIndexVariables = {
+                    body: {
+                      email: email,
+                      abfragen: [
+                        {
+                          abfrageMitSchwellwert: {
+                            merkmalName: selectedVariableMockdata?.title,
+                            schwellwert: schwellwert,
+                          },
+                        },
+                      ],
+                    },
+                  };
+                  registriereMitIndexMutation.mutate(formData);
+                }}
+              />
             </ActionIcon>
           }
         ></TextInput>

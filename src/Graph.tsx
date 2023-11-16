@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BarStack } from "@visx/shape";
 import { Group } from "@visx/group";
 import {
@@ -12,11 +12,10 @@ import {
 import type { GraphData } from "./Store";
 import { scaleBand, scaleLinear, scaleOrdinal } from "@visx/scale";
 import { useTooltip, useTooltipInPortal } from "@visx/tooltip";
-import { useStatisticsStore } from "./Store";
+import { useGraphDataStore, useStatisticsStore } from "./Store";
 
-import { AxisBottom } from "@visx/axis";
-import { useGetAbfrageErgebnis } from "./client/datenbrauereiComponents";
-
+import { fetchGetErgebnisFuerMerkmal } from "./client/datenbrauereiComponents";
+import { useQueries } from "@tanstack/react-query";
 // To-Do: Add animation
 import { useSpring, animated } from "react-spring";
 
@@ -60,42 +59,67 @@ export function shadeColor(color, percent) {
 
 export type StackedBarData = {
   circle: string;
-  Gästeübernachtungen: number;
-  "Anzahl der Grundschulen": number;
-  "Durchschnittlicher Kaufwert je qm": number;
+  Gästeübernachtungen?: number;
+  "Anzahl der Grundschulen"?: number;
+  "Durchschnittlicher Kaufwert je qm"?: number;
 };
 
 export function Graph({ width, height }: BarsProps) {
-  const { data: result } = useGetAbfrageErgebnis({
-    pathParams: { id: "baulandpreise" },
-    // To-Do: Add county to query
+  const { changeCounty, countys, variables, circles, selectCircle } =
+    useStatisticsStore((state) => state);
+  const setGraphData = useGraphDataStore((state) => state.setGraphData);
+
+  const queries = variables.map((variable, index) => {
+    return {
+      queryKey: ["getErgebnisFuerMerkmal", index],
+      queryFn: () =>
+        fetchGetErgebnisFuerMerkmal({
+          pathParams: { name: variable.name },
+        }),
+      staleTime: Infinity,
+    };
   });
 
-  // Map AbfrageErgebnis to GraphData
-  const maybe = result?.merkmalErgebnisse?.map((item) => {
-    const graphData: GraphData = {
-      name: item.merkmalCode || "", // This is just an id
-      county: "Brandenburg", // Use the selected county
-      circle: item.regionalGliederung || "", // This is a number!
-      value: item.normierterWert || 0,
-      absolute: item.absoluterWert || 0,
-    };
-    return graphData;
+  const results = useQueries({
+    queries: queries,
   });
+  const resultData = results.map((item) => item.data);
+
+  // Map AbfrageErgebnis to GraphData
+  const maybeArray = resultData.map((singleResult) =>
+    singleResult?.merkmalErgebnisse?.map((item) => {
+      const graphData: GraphData = {
+        name: singleResult.abfrageId || "", // Use the requested merkmal
+        county: "Brandenburg", // Use the selected county
+        circle: item.regionalGliederungLabel || "",
+        value: item.normierterWert || 0,
+        absolute: item.absoluterWert || 0,
+      };
+      return graphData;
+    })
+  );
+
+  let maybe: GraphData[] = [];
+  maybeArray.forEach((array) => {
+    maybe = maybe.concat(array ? array : []);
+  });
+
+  useEffect(() => {
+    setGraphData(maybe);
+    console.log(variables);
+  }, [variables]);
 
   const xMax = width;
   const yMax = height - verticalMargin;
 
-  const { graphData, changeCounty, countys, variables, circles, selectCircle } =
-    useStatisticsStore((state) => state);
-  const keys = [...new Set(graphData.map((item) => item.name))];
+  const keys = [...new Set(maybe.map((item) => item.name))];
   const absoluteValuesWithKeys = {};
-  graphData.forEach((item) => {
+  maybe.forEach((item) => {
     const keyName = item.name + item.circle;
     absoluteValuesWithKeys[keyName] = item.absolute;
   });
 
-  const transformedData = graphData
+  const transformedData = maybe
     .filter((item) => item.county === countys[0])
     .reduce<StackedBarData[]>((accumulator, item) => {
       const existingItem = accumulator.find(
@@ -135,10 +159,12 @@ export function Graph({ width, height }: BarsProps) {
     return aTotal - bTotal;
   });
 
-  const largestTotal = Object.values(
-    transformedData[transformedData.length - 1]
-  ).reduce((acc, value) => acc + parseFloat(value) || 0, 0);
-
+  const largestTotal = transformedData[transformedData.length - 1]
+    ? Object.values(transformedData[transformedData.length - 1]).reduce(
+        (acc, value) => acc + parseFloat(value) || 0,
+        0
+      )
+    : 0;
   const originalData = transformedData;
   let data = originalData;
 
@@ -292,17 +318,6 @@ export function Graph({ width, height }: BarsProps) {
               }
             </BarStack>
           </Group>
-          <AxisBottom
-            top={yMax}
-            scale={xScale}
-            stroke={purple1}
-            tickStroke={purple1}
-            tickLabelProps={{
-              fill: purple1,
-              fontSize: 11,
-              textAnchor: "middle",
-            }}
-          />
           {tooltipOpen && (
             <TooltipInPortal
               // set this to random so it correctly updates with parent bounds
