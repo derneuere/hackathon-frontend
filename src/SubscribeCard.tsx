@@ -30,6 +30,7 @@ export function SubscribeCard() {
 
           <TextInput
             label={<Text c="dimmed">Gib deinem Index einen Namen!</Text>}
+            placeholder="Remote Refugium Tracker"
             value={name}
             onChange={(event) => setName(event.currentTarget.value)}
           ></TextInput>
