@@ -110,25 +110,26 @@ export function ModalSubscribe({ opened, close }: SubscribeProps) {
               </Text>
             </div>
           </Flex>
-          <Slider
-            style={{ paddingLeft: 25, paddingRight: 25 }}
-            value={schwellwert}
-            onChange={setSchwellwert}
-            color={selectedVariableMockdata?.color}
-            step={1}
-            min={minValueForSelectedVariable}
-            max={maxValueForSelectedVariable}
-            marks={[
-              {
-                value: minValueForSelectedVariable,
-                label: `Min: ${Math.round(minValueForSelectedVariable)}`,
-              },
-              {
-                value: maxValueForSelectedVariable,
-                label: `Max: ${Math.round(maxValueForSelectedVariable)}`,
-              },
-            ]}
-          ></Slider>
+          <div style={{ paddingLeft: 25, paddingRight: 25 }}>
+            <Slider
+              value={schwellwert}
+              onChange={setSchwellwert}
+              color={selectedVariableMockdata?.color}
+              step={1}
+              min={minValueForSelectedVariable}
+              max={maxValueForSelectedVariable}
+              marks={[
+                {
+                  value: minValueForSelectedVariable,
+                  label: `Min: ${Math.round(minValueForSelectedVariable)}`,
+                },
+                {
+                  value: maxValueForSelectedVariable,
+                  label: `Max: ${Math.round(maxValueForSelectedVariable)}`,
+                },
+              ]}
+            ></Slider>
+          </div>
         </Card>
 
         <TextInput
