@@ -2,6 +2,7 @@ import React from "react";
 
 import { Card, Flex, Stack, Text, Title, Progress } from "@mantine/core";
 import { useGraphDataStore, useStatisticsStore } from "./Store";
+import { mockdata } from "./Helper";
 
 export function CircleDetails() {
   const { circles } = useStatisticsStore((state) => state);
@@ -25,8 +26,25 @@ export function CircleDetails() {
                       <Text size="sm" c="dimmed">
                         {i.name}
                       </Text>
-                      <Text size="md">{i.absolute}</Text>
-                      <Progress value={i.value * 100}></Progress>
+                      <Text
+                        size="md"
+                        color={
+                          mockdata.find((item) => item.title === i.name)
+                            ?.darkerColor
+                            ? mockdata.find((item) => item.title === i.name)
+                                ?.darkerColor
+                            : mockdata.find((item) => item.title === i.name)
+                                ?.color
+                        }
+                      >
+                        {i.absolute}
+                      </Text>
+                      <Progress
+                        value={i.value * 100}
+                        color={
+                          mockdata.find((item) => item.title === i.name)?.color
+                        }
+                      ></Progress>
                     </Stack>
                   </Card>
                 ))}
