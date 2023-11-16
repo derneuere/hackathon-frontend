@@ -24,7 +24,6 @@ function App() {
   }
 
   const { width } = useViewportSize();
-  // To-Do: Implement another subscription
   return (
     <div
       style={{

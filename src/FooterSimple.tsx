@@ -41,14 +41,10 @@ export function FooterSimple() {
           direction="row"
           wrap="wrap"
         >
-          <Image src={logo2} maw={50} mah={40} mx="auto" />
           <Image src={logo3} maw={50} mah={40} mx="auto" />
         </Flex>
         <Group className={classes.links}>{items}</Group>
         <Group className={classes.social}>
-          <ActionIcon size="lg" color="gray" variant="subtle">
-            <IconBrandTwitter />
-          </ActionIcon>
           <ActionIcon
             size="lg"
             color="gray"
