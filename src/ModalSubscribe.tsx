@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   Modal,
@@ -44,11 +44,16 @@ export function ModalSubscribe({ opened, close }: SubscribeProps) {
     selectedVariableGraphData[selectedVariableGraphData.length - 1] * 1.5;
   const minValueForSelectedVariable = selectedVariableGraphData[0] * 0.75;
 
-  console.log(maxValueForSelectedVariable);
-  console.log(minValueForSelectedVariable);
+  useEffect(() => {
+    setSchwellwert(
+      Math.round(
+        (maxValueForSelectedVariable + minValueForSelectedVariable) / 2
+      )
+    );
+  }, [selectedVariable]);
 
   const [schwellwert, setSchwellwert] = useState(
-    maxValueForSelectedVariable + minValueForSelectedVariable / 2
+    Math.round((maxValueForSelectedVariable + minValueForSelectedVariable) / 2)
   );
 
   const registriereMitIndexMutation = useRegistriereMitIndex();
