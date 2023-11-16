@@ -37,7 +37,7 @@ export function SubscribeCard() {
           <TextInput
             label={
               <Text c="dimmed">
-                Wohin sollen wir Deine Benachrichtigung senden?
+                Wohin sollen wir deine Benachrichtigung senden?
               </Text>
             }
             value={email}
@@ -84,7 +84,7 @@ export function SubscribeCard() {
                     notifications.show({
                       title: "Index aboniert",
                       message:
-                        "Wir informieren dich sobald dein Index sich ändert!",
+                        "Wir informieren dich sobald Dein Index sich ändert!",
                       color: "green",
                     });
                     setEmail("");

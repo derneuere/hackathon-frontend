@@ -77,7 +77,7 @@ export function ModalSubscribe({ opened, close }: SubscribeProps) {
     >
       <Stack>
         <Text c="dimmed" size="sm">
-          Wir können dich informieren, sobald ein von Dir gewählter Grenzwert in
+          Wir können dich informieren, sobald ein von dir gewählter Grenzwert in
           einem Kreis unter- oder überschritten wird.
         </Text>
 
@@ -140,7 +140,7 @@ export function ModalSubscribe({ opened, close }: SubscribeProps) {
         <TextInput
           label={
             <Text c="dimmed">
-              Wohin sollen wir Deine Benachrichtigung senden?
+              Wohin sollen wir deine Benachrichtigung senden?
             </Text>
           }
           value={email}
@@ -167,7 +167,7 @@ export function ModalSubscribe({ opened, close }: SubscribeProps) {
                   notifications.show({
                     title: "Schwellenwert aboniert",
                     message:
-                      "Wir informieren dich sobald der Wert unter oder überschritten wird!",
+                      "Wir informieren dich sobald der Wert unter- oder überschritten wird!",
                     color: "green",
                   });
                   setEmail("");
