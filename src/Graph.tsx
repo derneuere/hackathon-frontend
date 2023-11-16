@@ -121,6 +121,8 @@ export function Graph({ width, height }: BarsProps) {
   const xMax = width;
   const yMax = height - verticalMargin;
 
+  console.log(maybe);
+
   const visualData = maybe.length > 0 ? maybe : graphData;
   // const visualData = maybe;
   const keys = [...new Set(visualData.map((item) => item.name))];
