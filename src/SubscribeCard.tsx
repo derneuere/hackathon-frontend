@@ -73,6 +73,7 @@ export function SubscribeCard() {
                         abfragen: [
                           {
                             dimensionen: dimensionen,
+                            regionalerUmfang: "12",
                           },
                         ],
                       },
