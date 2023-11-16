@@ -6,6 +6,7 @@ import { useStatisticsStore } from "./Store";
 import { Variables } from "./Variables";
 import { ModalSubscribe } from "./ModalSubscribe";
 import { CircleDetails } from "./CircleDetails";
+import { SubscribeCard } from "./SubscribeCard";
 
 function App() {
   const [opened, { open, close }] = useDisclosure(false);
@@ -23,10 +24,7 @@ function App() {
   }
 
   const { width } = useViewportSize();
-  // To-Do: Implement result of subscription
-  // To-Do: Implement delete via drag and drop
   // To-Do: Implement another subscription
-  // To-Do: Actually load from the backend
   return (
     <div
       style={{
@@ -73,6 +71,8 @@ function App() {
           <Variables openSubscribe={open} />
         </Flex>
         <CircleDetails></CircleDetails>
+        <SubscribeCard></SubscribeCard>
+
         <div style={{ height: 100 }}></div>
       </Stack>
       <ModalSubscribe opened={opened} close={close} />

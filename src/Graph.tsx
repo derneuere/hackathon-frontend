@@ -68,7 +68,8 @@ export type StackedBarData = {
 export function Graph({ width, height }: BarsProps) {
   const { changeCounty, countys, variables, circles, selectCircle } =
     useStatisticsStore((state) => state);
-  const setGraphData = useGraphDataStore((state) => state.setGraphData);
+  const { graphData, setGraphData } = useGraphDataStore((state) => state);
+
   const queries = variables.map((variable) => {
     return {
       queryKey: ["getErgebnisFuerMerkmal", variable.name],
@@ -88,7 +89,6 @@ export function Graph({ width, height }: BarsProps) {
     queries: queries,
   });
   const resultData = results.map((item) => item.data);
-  console.log(resultData);
 
   // Map AbfrageErgebnis to GraphData
   const maybeArray = resultData.map((singleResult) =>
@@ -112,21 +112,24 @@ export function Graph({ width, height }: BarsProps) {
   });
 
   useEffect(() => {
-    setGraphData(maybe);
-    console.log(variables);
+    if (maybe.length > 0 && maybe[0]) {
+      setGraphData(maybe);
+    }
   }, [variables]);
 
   const xMax = width;
   const yMax = height - verticalMargin;
 
-  const keys = [...new Set(maybe.map((item) => item.name))];
+  const visualData = maybe.length > 0 ? maybe : graphData;
+  // const visualData = maybe;
+  const keys = [...new Set(visualData.map((item) => item.name))];
   const absoluteValuesWithKeys = {};
-  maybe.forEach((item) => {
+  visualData.forEach((item) => {
     const keyName = item.name + item.circle;
     absoluteValuesWithKeys[keyName] = item.absolute;
   });
 
-  const transformedData = maybe
+  const transformedData = visualData
     .filter((item) => item.county === countys[0])
     .reduce<StackedBarData[]>((accumulator, item) => {
       const existingItem = accumulator.find(
@@ -308,8 +311,7 @@ export function Graph({ width, height }: BarsProps) {
                       fill={
                         circles.includes(bar.bar.data.circle)
                           ? shadeColor(bar.color, -20)
-                          : mockdata.find((item) => item.querykey === bar.key)
-                              ?.barcolor
+                          : bar.color
                       }
                       onClick={() => {
                         selectCircle(bar.bar.data.circle);
