@@ -5,7 +5,7 @@ import { useGraphDataStore, useStatisticsStore } from "./Store";
 import { mockdata } from "./Helper";
 
 export function CircleDetails() {
-  const { circles } = useStatisticsStore((state) => state);
+  const { circles, variables } = useStatisticsStore((state) => state);
   const { graphData } = useGraphDataStore((state) => state);
 
   if (circles.length === 0) {
@@ -19,7 +19,11 @@ export function CircleDetails() {
             <Title order={3}>Kreis: {circle}</Title>
             <Flex gap="md" direction={{ base: "column", sm: "row" }}>
               {graphData
-                .filter((i) => i.circle === circle)
+                .filter(
+                  (i) =>
+                    i.circle === circle &&
+                    variables.find((variable) => variable.name === i.name)
+                )
                 .map((i) => (
                   <Card shadow="sm" padding="lg" radius="md" withBorder>
                     <Stack mih={50} miw={200} spacing={"xs"}>

@@ -308,6 +308,7 @@ export function Graph({ width, height }: BarsProps) {
               x={(i: StackedBarData) => {
                 return i.circle;
               }}
+              aria-label="test"
               keys={keys}
               xScale={xScale}
               yScale={yScale}
@@ -340,7 +341,7 @@ export function Graph({ width, height }: BarsProps) {
                       onMouseLeave={() => {
                         hideTooltip();
                       }}
-                    />
+                    ></rect>
                   ))
                 )
               }
