@@ -83,7 +83,7 @@ export function Variables({ openSubscribe }: VariablesProps) {
       <Stack align={"center"}>
         <div>
           <Title>Themenauswahl</Title>
-          <Text c="dimmed">Welchen Merkmale willst du vergleichen?</Text>
+          <Text c="dimmed">Welche Merkmale willst du vergleichen?</Text>
         </div>
         {items}
         <Button variant="light" color="green" onClick={() => open()}>
