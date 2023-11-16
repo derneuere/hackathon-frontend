@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import { Card, TextInput, Stack, Text, Title, ActionIcon } from "@mantine/core";
 import { useGraphDataStore, useStatisticsStore } from "./Store";
-import { IconSend } from "@tabler/icons-react";
+import { IconSend, IconShare } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
 import {
   useRegistriereMitIndex,
@@ -27,8 +27,9 @@ export function SubscribeCard() {
           <Title order={3}>
             Werde informiert, wenn sich dein Index ändert!
           </Title>
+
           <TextInput
-            label={<Text c="dimmed">Gebe deinen Index einen Namen!</Text>}
+            label={<Text c="dimmed">Gib deinem Index einen Namen!</Text>}
             value={name}
             onChange={(event) => setName(event.currentTarget.value)}
           ></TextInput>

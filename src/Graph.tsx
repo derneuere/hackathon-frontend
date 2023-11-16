@@ -19,6 +19,7 @@ import { useQueries } from "@tanstack/react-query";
 // To-Do: Add animation
 import { useSpring, animated } from "react-spring";
 import { mockdata } from "./Helper";
+import { ShareButton } from "./ShareButton";
 
 // Sort data by frequency
 const verticalMargin = 25;
@@ -251,42 +252,53 @@ export function Graph({ width, height }: BarsProps) {
       withBorder
     >
       <Stack>
-        <Title>
-          Platzierung der Top {data.length} Kreise in{" "}
-          <Menu>
-            <Menu.Target>
-              <UnstyledButton>
-                <Title inherit variant="gradient">
-                  {countys}
-                  <ChevronIcon width={50}></ChevronIcon>
-                </Title>
-              </UnstyledButton>
-            </Menu.Target>
-            <Menu.Dropdown>
-              <Menu.Label>Wähle ein anderes Bundesland aus</Menu.Label>
-              <Menu.Item onClick={() => changeCounty("Berlin")}>
-                <Title order={5} variant="gradient">
-                  Berlin
-                </Title>
-              </Menu.Item>
-              <Menu.Item onClick={() => changeCounty("Hamburg")}>
-                <Title order={5} variant="gradient">
-                  Hamburg
-                </Title>
-              </Menu.Item>
-              <Menu.Item onClick={() => changeCounty("Hannover")}>
-                <Title order={5} inherit variant="gradient">
-                  Hannover
-                </Title>
-              </Menu.Item>
-              <Menu.Item onClick={() => changeCounty("Brandenburg")}>
-                <Title order={5} inherit variant="gradient">
-                  Brandenburg
-                </Title>
-              </Menu.Item>
-            </Menu.Dropdown>
-          </Menu>
-        </Title>
+        <div>
+          <Title>
+            Platzierung der Top {data.length} Kreise in{" "}
+            <Menu>
+              <Menu.Target>
+                <UnstyledButton>
+                  <Title inherit variant="gradient">
+                    {countys}
+                    <ChevronIcon width={50}></ChevronIcon>
+                  </Title>
+                </UnstyledButton>
+              </Menu.Target>
+              <Menu.Dropdown>
+                <Menu.Label>Wähle ein anderes Bundesland aus</Menu.Label>
+                <Menu.Item onClick={() => changeCounty("Berlin")}>
+                  <Title order={5} variant="gradient">
+                    Berlin
+                  </Title>
+                </Menu.Item>
+                <Menu.Item onClick={() => changeCounty("Hamburg")}>
+                  <Title order={5} variant="gradient">
+                    Hamburg
+                  </Title>
+                </Menu.Item>
+                <Menu.Item onClick={() => changeCounty("Hannover")}>
+                  <Title order={5} inherit variant="gradient">
+                    Hannover
+                  </Title>
+                </Menu.Item>
+                <Menu.Item onClick={() => changeCounty("Brandenburg")}>
+                  <Title order={5} inherit variant="gradient">
+                    Brandenburg
+                  </Title>
+                </Menu.Item>
+              </Menu.Dropdown>
+            </Menu>
+          </Title>
+          <div
+            style={{
+              position: "absolute",
+              right: 15,
+              top: 15,
+            }}
+          >
+            <ShareButton></ShareButton>
+          </div>
+        </div>
         <svg ref={containerRef} width={width} height={height}>
           <Group>
             <BarStack<StackedBarData, string>
